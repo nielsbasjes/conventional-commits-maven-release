@@ -54,7 +54,7 @@
       <plugin>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>sisu-maven-plugin</artifactId>
-        <version>@sisuVersion@</version>
+        <version>@org-eclipse-sisu.version@</version>
         <executions>
           <execution>
             <id>index-project</id>

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Conventional Commits Version Policy
-# Copyright (C) 2013-2023 Niels Basjes
+# Copyright (C) 2022-2023 Niels Basjes
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,8 +98,8 @@ fi
 
 # ----------------------------------------------------------------------------------------------------
 ## Update the top of the CHANGELOG.md and website frontpage
-vim CHANGELOG.md documentation/content/_index.md
-git commit -m"docs: Updated CHANGELOG and website before release" CHANGELOG.md documentation/content/_index.md
+#vim CHANGELOG.md README.md
+#git commit -m"docs: Updated CHANGELOG and README before release" CHANGELOG.md README.md
 
 # ----------------------------------------------------------------------------------------------------
 info "GPG workaround: Starting"
@@ -195,13 +195,5 @@ warn "Now go and manually push it all"
 # ----------------------------------------------------------------------------------------------------
 echo "git push"
 echo "git push --tags"
-
-# Publish the docker image
-RELEASEVERSION=$(git describe --abbrev=0| sed 's/^v//')
-echo "docker push \"nielsbasjes/yauaa:${RELEASEVERSION}\""
-echo "docker push \"nielsbasjes/yauaa:latest\""
-
-info "Upload logstash gem to github.com"
-warn "${PWD}/target/checkout/udfs/elastic/logstash/logstash-filter/target/logstash-filter-yauaa-*.gem"
 
 # ----------------------------------------------------------------------------------------------------

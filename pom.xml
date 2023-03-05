@@ -49,9 +49,6 @@
     <dependency-convergence.phase>validate</dependency-convergence.phase>
     <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
     <checkstyle.version>10.8.0</checkstyle.version>
-    <spotbugs-maven-plugin.version>4.7.3.2</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.7.3</spotbugs.version>
-    <log4j2.version>2.20.0</log4j2.version>
     <apache-rat-plugin.version>0.15</apache-rat-plugin.version>
     <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
     <junit5.version>5.9.2</junit5.version>
@@ -83,7 +80,7 @@
     <maven-failsafe-plugin.version>3.0.0-M9</maven-failsafe-plugin.version>
     <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 
-    <sisuVersion>0.3.5</sisuVersion>
+    <org-eclipse-sisu.version>0.3.5</org-eclipse-sisu.version>
 
     <script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 
@@ -129,13 +126,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-bom</artifactId>
-        <version>${log4j2.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>org.apache.logging.log4j</groupId>-->
+<!--        <artifactId>log4j-bom</artifactId>-->
+<!--        <version>${log4j2.version}</version>-->
+<!--        <scope>import</scope>-->
+<!--        <type>pom</type>-->
+<!--      </dependency>-->
     </dependencies>
   </dependencyManagement>
 
@@ -191,12 +188,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
       <version>1</version>
@@ -206,7 +197,7 @@
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.inject</artifactId>
-      <version>${sisuVersion}</version>
+      <version>${org-eclipse-sisu.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -229,7 +220,6 @@
         <rat.skip>true</rat.skip>
         <checkstyle.skip>true</checkstyle.skip>
         <jacoco.skip>true</jacoco.skip>
-        <spotbugs.skip>true</spotbugs.skip>
         <dependency-check.skip>true</dependency-check.skip>
         <dependency-convergence.phase>none</dependency-convergence.phase>
         <docker-based-tests.skip>true</docker-based-tests.skip>
@@ -830,11 +820,6 @@
           <version>${maven-checkstyle-plugin.version}</version>
           <dependencies>
             <dependency>
-              <groupId>nl.basjes.parse.useragent</groupId>
-              <artifactId>yauaa-devtools</artifactId>
-              <version>${project.version}</version>
-            </dependency>
-            <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
               <version>${checkstyle.version}</version>
@@ -842,8 +827,8 @@
           </dependencies>
           <configuration>
             <consoleOutput>true</consoleOutput>
-            <configLocation>checkstyle/checkstyle.xml</configLocation>
-            <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+            <configLocation>devtools/checkstyle/checkstyle.xml</configLocation>
+            <suppressionsLocation>devtools/checkstyle/suppressions.xml</suppressionsLocation>
             <includeTestSourceDirectory>true</includeTestSourceDirectory>
           </configuration>
           <!-- Runs by default in the verify phase  (mvn verify or later in the build cycle)
@@ -897,39 +882,6 @@
           </executions>
         </plugin>
 
-        <plugin>
-          <groupId>com.github.spotbugs</groupId>
-          <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>${spotbugs-maven-plugin.version}</version>
-          <configuration>
-            <!-- FIXME: Spotbugs disabled because of inconsistent reports. -->
-            <!--        Build from root: pass, Build from module: fail.    -->
-            <skip>true</skip>
-            <excludeFilterFile>spotbugs/spotbugs-exclude.xml</excludeFilterFile>
-          </configuration>
-          <dependencies>
-            <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
-            <dependency>
-              <groupId>com.github.spotbugs</groupId>
-              <artifactId>spotbugs</artifactId>
-              <version>${spotbugs.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>nl.basjes.parse.useragent</groupId>
-              <artifactId>yauaa-devtools</artifactId>
-              <version>${project.version}</version>
-            </dependency>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>validate bugs</id>
-              <phase>validate</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
 
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>

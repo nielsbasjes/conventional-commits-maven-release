@@ -3,108 +3,132 @@ When using the [maven release plugin](https://maven.apache.org/maven-release/) y
 
 This is a version policy that enforces the Semantic Versioning format and upgrades major/minor/patch element for next development version depending on the commit messages since the previous release (actually tag in the SCM).
 
-The default configuration follows the [Conventional Commits](https://www.conventionalcommits.org/) standard.
+The default configuration follows the [Conventional Commits](https://www.conventionalcommits.org/) standard for calculating the next version.
 
+# Requirements
+This version policy requires version 3.0.0-M8 or newer of the maven-release-plugin to be used.
 
+# How the next version is calculated
 
+The calculation works as follows:
+* It tries to find the previously released version by searching for the previous release tag.
+  Here the configured `versionTag` regex is used to locate and extract (the regex MUST have exactly
+  1 capture group) the correct value.
+  If no matching tags are found the project version from the pom.xml is used as the fallback reference point.
 
-* CCSemVerVersionPolicy (since 3.0.0-M8): \
-  A version policy that enforces the SemVer format and uses Conventional Commits to determine the next version.
+* By default, it assumes that only a patch release (i.e. `?.?.+1` ) is needed.
 
+* If any of the commit messages since the previous release tag match any of the of `minorRules` regexes then
+  it assumes the next release is a minor release (i.e. `?.+1.0` ).
 
-* CCSemVerVersionPolicy
+* If any of the commit messages since the previous release tag match any of the of `majorRules` regexes then
+  it assumes the next release is a major release (i.e. `+1.0.0` ).
 
-  The CCSemVerVersionPolicy is different in the sense that it goes beyond the project version specified in the pom.xml
-  and tries to analyze the SCM history and from the tags and commit messages it calculates the next version.
-  For this a few additional configuration options are available.
+The next development version is always calculated as the release version and then `?.?.+1-SNAPSHOT`.
 
-  The calculation works as follows:
+When doing `mvn release:prepare -X` the details about the found tags, commit messages and the used patterns
+are output to the console.
 
-    * It tries to find the previously released version by searching for the previous release tag.
-      Here the configured <<<versionTag>>> regex is used to locate and extract (the regex MUST have exactly
-      1 capture group) the correct value.
-      If no matching tags are found the project version from the pom.xml is used as the fallback reference point.
+# Configuration
+## Default configuration
+The default configuration assumes a version tag that is just the version (i.e. something like `1.2.3`) and
+the rules from the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) are followed.
 
-    * By default it assumes that only a patch release (i.e. <<<?.?.+1>>> ) is needed.
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-release-plugin</artifactId>
+  <version>3.0.0-M8</version>
+  <dependencies>
+    <dependency>
+      <groupId>nl.basjes.maven.release</groupId>
+      <artifactId>conventional-commits-version-policy</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+  <configuration>
+    <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
+  </configuration>
+</plugin>
+```
 
-    * If any of the commit messages since the previous release tag match any of the of <<<minorRules>>> regexes then
-      it assumes the next release is a minor release (i.e. <<<?.+1.0>>> ).
+## Using a custom release tag format
+If you want a different tag format this will usually result in setting it both when creating the tag and
+for finding it again.
+Here the rules from the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) are also followed.
 
-    * If any of the commit messages since the previous release tag match any of the of <<<majorRules>>> regexes then
-      it assumes the next release is a major release (i.e. <<<+1.0.0>>> ).
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-release-plugin</artifactId>
+  <version>3.0.0-M8</version>
+  <dependencies>
+    <dependency>
+      <groupId>nl.basjes.maven.release</groupId>
+      <artifactId>conventional-commits-version-policy</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+  <configuration>
+    <tagNameFormat>v@{project.version}</tagNameFormat>
 
-  The next development version is always calculated as the release version and then <<<?.?.+1-SNAPSHOT>>>.
+    <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
 
-  When doing <<<mvn release:prepare -X>>> the details about the found tags, commit messages and the used patterns
-  are output to the console.
+    <!-- projectVersionPolicyConfig for the CCSemVerVersionPolicy is an XML structure:  -->
+    <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
+    <projectVersionPolicyConfig>
+      <versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
+    </projectVersionPolicyConfig>
+  </configuration>
+</plugin>
+```
 
-  The default configuration assumes a version tag that is just the version (i.e. something like <<<1.2.3>>>) and
-  the rules from the {{{https://www.conventionalcommits.org/en/v1.0.0/}Conventional Commits v1.0.0}} are followed.
-
-  If you want a different tag format this will usually result in setting it both when creating the tag and
-  for finding it again:
-
-+-------------------
-<configuration>
-<tagNameFormat>v@{project.version}</tagNameFormat>
-<projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
-<projectVersionPolicyConfig>
-<versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
-</projectVersionPolicyConfig>
-</configuration>
-+-------------------
-
-If either the minor or major rules are specified then all default rules (both minor and major) are dropped
+## Using custom commit message patterns
+If either the minor or major rules are specified then **all default** rules (both minor and major) **are dropped**
 in favour of the configuration.
 
-+-------+
-<project>
-...
-<build>
-<plugins>
+```xml
 <plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-release-plugin</artifactId>
-<version>${project.version}</version>
-<configuration>
-<tagNameFormat>v@{project.version}</tagNameFormat>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-release-plugin</artifactId>
+  <version>3.0.0-M8</version>
+  <dependencies>
+    <dependency>
+      <groupId>nl.basjes.maven.release</groupId>
+      <artifactId>conventional-commits-version-policy</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+  <configuration>
+    <tagNameFormat>v@{project.version}</tagNameFormat>
 
-          <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
+    <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
 
-          <!-- projectVersionPolicyConfig for the CCSemVerVersionPolicy is an XML structure:  -->
-          <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
-          <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
-          <!--             the last tag. If matched the next version is at least a MINOR update.                -->
-          <!-- majorRules: A list regexes that will be matched against all lines in each commit message since   -->
-          <!--             the last tag. If matched the next version is at least a MAJOR update.                -->
-          <!-- If a match is found the commit will trigger either a minor or major version increase             -->
-          <!-- instead of only a patch increase.                                                                -->
-          <projectVersionPolicyConfig>
-            <versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
-            <majorRules>
-              <majorRule>^[a-zA-Z]+!(?:\([a-zA-Z0-9_-]+\))?: .*$</majorRule>
-              <majorRule>^BREAKING CHANGE:.*$</majorRule>
-            </majorRules>
-            <minorRules>
-              <minorRule>^feat(?:\([a-zA-Z0-9_-]+\))?: .*$</minorRule>
-            </minorRules>
-          </projectVersionPolicyConfig>
-        </configuration>
-      </plugin>
-    </plugins>
-    ...
-  </build>
-  ...
-</project>
-+-------+
+    <!-- projectVersionPolicyConfig for the CCSemVerVersionPolicy is an XML structure:  -->
+    <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
+    <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
+    <!--             the last tag. If matched the next version is at least a MINOR update.                -->
+    <!-- majorRules: A list regexes that will be matched against all lines in each commit message since   -->
+    <!--             the last tag. If matched the next version is at least a MAJOR update.                -->
+    <!-- If a match is found the commit will trigger either a minor or major version increase             -->
+    <!-- instead of only a patch increase.                                                                -->
+    <projectVersionPolicyConfig>
+      <versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
+      <majorRules>
+        <majorRule>^[a-zA-Z]+!(?:\([a-zA-Z0-9_-]+\))?: .*$</majorRule>
+        <majorRule>^BREAKING CHANGE:.*$</majorRule>
+      </majorRules>
+      <minorRules>
+        <minorRule>^feat(?:\([a-zA-Z0-9_-]+\))?: .*$</minorRule>
+      </minorRules>
+    </projectVersionPolicyConfig>
+  </configuration>
+</plugin>
+```
 
-
-
-License
-=======
-
+# License
     Conventional Commits Version Policy
-    Copyright (C) 2013-2023 Niels Basjes
+    Copyright (C) 2022-2023 Niels Basjes
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
