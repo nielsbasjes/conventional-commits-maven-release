@@ -1,0 +1,70 @@
+#Antlr4
+gen
+*.tokens
+
+#Maven
+dependency-reduced-pom.xml
+
+#Crashing eclipse
+hs_err_pid*.log
+tmp
+debug-output
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+target
+*.bak
+*.swp
+*~
+bin
+
+#Eclipse stuff
+.metadata
+.settings
+.classpath
+.project
+
+#IntelliJ stuff
+.idea
+*.iml
+.attach_pid*
+
+#test files
+x
+xx
+y
+yy
+z
+zz
+result-*.yaml
+__*
+
+# Patches related
+*.patch
+*.diff
+*.orig
+*.rej
+
+# Generated benchmark results
+benchmarks/results/*.txt
+benchmarks/*.csv
+benchmarks/*.dat
+
+# Local test files and scripts
+testfiles
+*.tar.gz
+
+# LibreOffice lock file
+.~lock.*
+
+# Accidentally generated documentation site
+_book
+node_modules
+docs/gitbook/gitbook-plugin-livereload/
+
+# Special stuff
+public_suffix_list.dat
+analyzer/pitest/
