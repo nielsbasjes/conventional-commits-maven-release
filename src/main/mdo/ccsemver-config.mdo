@@ -28,7 +28,7 @@
   <defaults>
     <default>
       <key>package</key>
-      <value>org.apache.maven.shared.release.policy.ccsemver.config</value>
+      <value>nl.basjes.maven.release.policy.ccsemver.config</value>
     </default>
   </defaults>
   <classes>

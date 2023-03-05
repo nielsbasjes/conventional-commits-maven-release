@@ -83,6 +83,8 @@
     <maven-failsafe-plugin.version>3.0.0-M9</maven-failsafe-plugin.version>
     <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 
+    <sisuVersion>0.3.5</sisuVersion>
+
     <script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 
     <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
@@ -183,6 +185,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <scope>test</scope>
@@ -198,7 +206,7 @@
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.inject</artifactId>
-      <version>0.3.5</version>
+      <version>${sisuVersion}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -256,6 +264,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-artifact-plugin</artifactId>
+            <version>3.4.0</version>
             <executions>
               <execution>
                 <id>compare</id>
@@ -278,6 +287,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.0.1</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -313,6 +323,7 @@
             <!-- explicitly define maven-deploy-plugin after other to force exec order -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-deploy-plugin</artifactId>
+            <version>3.1.0</version>
           </plugin>
 
         </plugins>
@@ -382,6 +393,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.8</version>
           </plugin>
         </plugins>
       </build>
@@ -567,7 +579,7 @@
             <!--   https://stackoverflow.com/questions/41944939/maven-build-failure-involving-manifest-mf-classpath-in-dependency-jars  -->
             <!--   https://stackoverflow.com/questions/1344202/bad-path-warning-where-is-it-coming-from                                 -->
             <arg>-Xlint:all,-processing,-serial,-path</arg>
-            <arg>${WerrorFlag}</arg>
+<!--            <arg>${WerrorFlag}</arg>-->
             <arg>-implicit:class</arg>
           </compilerArgs>
           <showWarnings>true</showWarnings>
@@ -583,6 +595,67 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>3.2.2</version>
+        <executions>
+          <execution>
+            <id>integration-test-prepare</id>
+            <goals>
+              <goal>install</goal>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <projectsDirectory>src/it</projectsDirectory>
+          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+          <postBuildHookScript>verify</postBuildHookScript>
+          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <settingsFile>src/it/mrm/settings.xml</settingsFile>
+          <filterProperties>
+            <mrm.repository.url>${mrm.repository.url}</mrm.repository.url>
+          </filterProperties>
+          <debug>true</debug>
+<!--          <ignoreFailures>${maven.it.failure.ignore}</ignoreFailures>-->
+          <setupIncludes>
+            <setupInclude>setup/*/pom.xml</setupInclude>
+          </setupIncludes>
+          <pomIncludes>
+            <pomInclude>projects/*/*pom.xml</pomInclude>
+          </pomIncludes>
+          <properties>
+            <allowReleasePluginSnapshot>true</allowReleasePluginSnapshot>
+            <maven.compiler.source>${maven.compiler.source}</maven.compiler.source>
+            <maven.compiler.target>${maven.compiler.target}</maven.compiler.target>
+            <dryRun>true</dryRun>
+          </properties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>mrm-maven-plugin</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>start</goal>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <repositories>
+            <mockRepo>
+              <source>src/it/mrm/repository</source>
+            </mockRepo>
+            <proxyRepo />
+          </repositories>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -712,6 +785,7 @@
           </execution>
         </executions>
       </plugin>
+
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

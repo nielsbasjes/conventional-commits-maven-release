@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Conventional Commits Version Policy
-  ~ Copyright (C) 2022-2023 Niels Basjes
+  ~ Copyright (C) 2013-2023 Niels Basjes
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@
 <Configuration>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT" follow="true">
-      <PatternLayout disableAnsi="false" pattern="%highlight{%d{ABSOLUTE} [%-5p] %-40c{1}:%5L: %m%n%throwable}{FATAL=bright red reverse, ERROR=bright red, WARN=bright yellow, INFO=default, DEBUG=cyan, TRACE=magenta}"/>
+      <PatternLayout disableAnsi="false"
+                     pattern="%highlight{%d{ABSOLUTE} [%-5p] %-40c{1}:%5L: %m%n%throwable}{FATAL=bright red reverse, ERROR=bright red, WARN=bright yellow, INFO=default, DEBUG=cyan, TRACE=magenta}"/>
     </Console>
   </Appenders>
   <Loggers>
