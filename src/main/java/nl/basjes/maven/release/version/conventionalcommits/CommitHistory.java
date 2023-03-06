@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.basjes.maven.release.policy.ccsemver;
+package nl.basjes.maven.release.version.conventionalcommits;
 
 import org.apache.maven.scm.ChangeSet;
 import org.apache.maven.scm.ScmException;

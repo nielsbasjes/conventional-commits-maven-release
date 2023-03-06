@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package nl.basjes.maven.release.policy.ccsemver;
+package nl.basjes.maven.release.version.conventionalcommits;
 
-import nl.basjes.maven.release.policy.ccsemver.config.ProjectVersionPolicyConfig;
-import nl.basjes.maven.release.policy.ccsemver.config.io.xpp3.ConventionalCommitsVersionPolicyConfigXpp3Reader;
+import nl.basjes.maven.release.version.conventionalcommits.config.ProjectVersionPolicyConfig;
+import nl.basjes.maven.release.version.conventionalcommits.config.io.xpp3.ConventionalCommitsVersionPolicyConfigXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.semver.Version;
 import org.slf4j.Logger;

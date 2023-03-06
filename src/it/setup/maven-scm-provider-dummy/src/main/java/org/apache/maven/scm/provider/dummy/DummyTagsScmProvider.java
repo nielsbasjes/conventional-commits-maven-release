@@ -105,7 +105,7 @@ public class DummyTagsScmProvider
 
         ScmResult scmResult = new ScmResult(
             "No command",
-            "Special for CCSemVer testing",
+            "Special for CCVersionPolicy testing",
             "No command output",
             true
         );

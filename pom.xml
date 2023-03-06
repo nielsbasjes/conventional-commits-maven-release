@@ -474,7 +474,7 @@
           <version>3.0.0</version>
           <packageWithVersion>false</packageWithVersion>
           <models>
-            <model>src/main/mdo/ccsemver-config.mdo</model>
+            <model>src/main/mdo/conventionalcommits-config.mdo</model>
           </models>
         </configuration>
       </plugin>

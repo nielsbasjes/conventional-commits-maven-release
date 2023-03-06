@@ -25,7 +25,7 @@
   <defaults>
     <default>
       <key>package</key>
-      <value>nl.basjes.maven.release.policy.ccsemver.config</value>
+      <value>nl.basjes.maven.release.version.conventionalcommits.config</value>
     </default>
   </defaults>
   <classes>
