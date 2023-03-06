@@ -1,3 +1,7 @@
+# IMPORTANT
+## This has to wait for the 3.0.0-M8 version of maven-release-plugin to be released.
+## Until that moment this cannot be built and/or used.
+
 # Introduction
 When using the [maven release plugin](https://maven.apache.org/maven-release/) you can add custom rules on how the next version is determined. Such a "next version calculation" is called a Version Policy.
 
