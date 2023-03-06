@@ -5,7 +5,7 @@
 # Introduction
 When using the [maven release plugin](https://maven.apache.org/maven-release/) you can add custom rules on how the next version is determined. Such a "next version calculation" is called a Version Policy.
 
-This is a version policy that enforces the Semantic Versioning format and upgrades major/minor/patch element for next development version depending on the commit messages since the previous release (actually tag in the SCM).
+This is a version policy that enforces the Semantic Versioning format and upgrades major/minor/patch element for next development version depending on the commit messages since the previous release which is detected by looking at the tags in the SCM.
 
 The default configuration follows the [Conventional Commits](https://www.conventionalcommits.org/) standard for calculating the next version.
 
@@ -15,20 +15,35 @@ This version policy requires version 3.0.0-M8 or newer of the maven-release-plug
 # How the next version is calculated
 
 The calculation works as follows:
+
+## Current version:
 * It tries to find the previously released version by searching for the previous release tag.
+
   Here the configured `versionTag` regex is used to locate and extract (the regex MUST have exactly
   1 capture group) the correct value.
-  If no matching tags are found the project version from the pom.xml is used as the fallback reference point.
 
-* By default, it assumes that only a patch release (i.e. `?.?.+1` ) is needed.
+* If no matching tags are found the project version from the pom.xml is used as the fallback reference point.
 
-* If any of the commit messages since the previous release tag match any of the of `minorRules` regexes then
+## Next release version:
+
+Notation used:
+- `?` : the new version element is the same as the existing version element.
+- `+1`: the new version element is the existing version element + 1.
+- `0` : the new version element is `0`.
+
+The steps:
+1. By default, it assumes that only a patch release (i.e. `?.?.+1` ) is needed.
+
+1. If any of the commit messages since the previous release tag match any of the of `minorRules` regexes then
   it assumes the next release is a minor release (i.e. `?.+1.0` ).
 
-* If any of the commit messages since the previous release tag match any of the of `majorRules` regexes then
+1. If any of the commit messages since the previous release tag match any of the of `majorRules` regexes then
   it assumes the next release is a major release (i.e. `+1.0.0` ).
 
-The next development version is always calculated as the release version and then `?.?.+1-SNAPSHOT`.
+## Next development version:
+The next development version is always calculated as the next release version and then `?.?.+1-SNAPSHOT`.
+
+## Examining what is happening:
 
 When doing `mvn release:prepare -X` the details about the found tags, commit messages and the used patterns
 are output to the console.
@@ -51,7 +66,7 @@ the rules from the [Conventional Commits v1.0.0](https://www.conventionalcommits
     </dependency>
   </dependencies>
   <configuration>
-    <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
+    <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
   </configuration>
 </plugin>
 ```
@@ -76,9 +91,9 @@ Here the rules from the [Conventional Commits v1.0.0](https://www.conventionalco
   <configuration>
     <tagNameFormat>v@{project.version}</tagNameFormat>
 
-    <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
+    <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
 
-    <!-- projectVersionPolicyConfig for the CCSemVerVersionPolicy is an XML structure:  -->
+    <!-- projectVersionPolicyConfig for the ConventionalCommitsVersionPolicy is an XML structure:  -->
     <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
     <projectVersionPolicyConfig>
       <versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
@@ -106,9 +121,9 @@ in favour of the configuration.
   <configuration>
     <tagNameFormat>v@{project.version}</tagNameFormat>
 
-    <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
+    <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
 
-    <!-- projectVersionPolicyConfig for the CCSemVerVersionPolicy is an XML structure:  -->
+    <!-- projectVersionPolicyConfig for the ConventionalCommitsVersionPolicy is an XML structure:  -->
     <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
     <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
     <!--             the last tag. If matched the next version is at least a MINOR update.                -->

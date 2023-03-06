@@ -18,7 +18,7 @@
 package nl.basjes.maven.release.policy.ccsemver;
 
 import nl.basjes.maven.release.policy.ccsemver.config.ProjectVersionPolicyConfig;
-import nl.basjes.maven.release.policy.ccsemver.config.io.xpp3.CCSemverVersionPolicyConfigXpp3Reader;
+import nl.basjes.maven.release.policy.ccsemver.config.io.xpp3.ConventionalCommitsVersionPolicyConfigXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.semver.Version;
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public class VersionRules {
 
         if (config != null && !config.trim().isEmpty()) {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(config.getBytes(UTF_8));
-            CCSemverVersionPolicyConfigXpp3Reader configReader = new CCSemverVersionPolicyConfigXpp3Reader();
+            ConventionalCommitsVersionPolicyConfigXpp3Reader configReader = new ConventionalCommitsVersionPolicyConfigXpp3Reader();
             try {
                 ProjectVersionPolicyConfig semverConfig = configReader.read(inputStream);
 
@@ -77,7 +77,7 @@ public class VersionRules {
                     }
                 }
             } catch (IOException | XmlPullParserException e) {
-                throw new IllegalArgumentException("Unable to load the CCSemverVersionPolicyConfig: ", e);
+                throw new IllegalArgumentException("Unable to load the ConventionalCommitsVersionPolicyConfig: ", e);
             }
         }
         tagPattern = Pattern.compile(tagRegex, Pattern.MULTILINE);

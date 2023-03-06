@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class CCSemVerVersionPolicyTest {
+class ConventionalCommitsVersionPolicyTest {
 
     private void verifyNextVersion(
         String versionRulesConfig,
@@ -41,11 +41,11 @@ class CCSemVerVersionPolicyTest {
         request.setConfig(versionRulesConfig);
         request.setVersion(pomVersion);
 
-        String suggestedVersion = new CCSemVerVersionPolicy().getReleaseVersion(request).getVersion();
+        String suggestedVersion = new ConventionalCommitsVersionPolicy().getReleaseVersion(request).getVersion();
         assertEquals(expectedReleaseVersion, suggestedVersion);
 
         request.setVersion(suggestedVersion);
-        String suggestedDevelopmentVersion = new CCSemVerVersionPolicy().getDevelopmentVersion(request).getVersion();
+        String suggestedDevelopmentVersion = new ConventionalCommitsVersionPolicy().getDevelopmentVersion(request).getVersion();
         assertEquals(expectedDevelopmentVersion, suggestedDevelopmentVersion);
     }
 

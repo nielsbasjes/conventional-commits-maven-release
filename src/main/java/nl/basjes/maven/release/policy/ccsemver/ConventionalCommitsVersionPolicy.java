@@ -35,11 +35,11 @@ import java.util.List;
  * Uses SemVer combined with the tags and commit messages to increase the version.
  */
 @Singleton
-@Named("CCSemVerVersionPolicy")
+@Named("ConventionalCommitsVersionPolicy")
 @Description("A VersionPolicy following the SemVer rules and looks at "
     + "the commit messages following the Conventional Commits convention.")
-public class CCSemVerVersionPolicy implements VersionPolicy {
-    protected Logger logger = LoggerFactory.getLogger(CCSemVerVersionPolicy.class);
+public class ConventionalCommitsVersionPolicy implements VersionPolicy {
+    protected Logger logger = LoggerFactory.getLogger(ConventionalCommitsVersionPolicy.class);
 
     public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request)
         throws VersionParseException {

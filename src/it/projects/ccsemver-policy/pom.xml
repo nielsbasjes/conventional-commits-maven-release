@@ -41,9 +41,9 @@
           <scmReleaseCommitComment>ci(Release): Version @{releaseLabel}</scmReleaseCommitComment>
           <tagNameFormat>v@{project.version}</tagNameFormat>
 
-          <projectVersionPolicyId>CCSemVerVersionPolicy</projectVersionPolicyId>
+          <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
 
-          <!-- projectVersionPolicyConfig for the CCSemVerVersionPolicy is an XML structure:  -->
+          <!-- projectVersionPolicyConfig for the ConventionalCommitsVersionPolicy is an XML structure:  -->
           <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
           <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
           <!--             the last tag. If matched the next version is at least a MINOR update.                -->

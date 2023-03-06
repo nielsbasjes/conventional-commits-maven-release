@@ -36,12 +36,12 @@ import static org.semver.Version.Element.PATCH;
 
 public class NextVersionCalculationTest {
 
-    private static CCSemVerVersionPolicy versionPolicy;
+    private static ConventionalCommitsVersionPolicy versionPolicy;
     private static final VersionRules DEFAULT_VERSION_RULES = new VersionRules(null);
 
     @BeforeAll
     public static void setUp() {
-        versionPolicy = new CCSemVerVersionPolicy();
+        versionPolicy = new ConventionalCommitsVersionPolicy();
     }
 
     @AfterAll
