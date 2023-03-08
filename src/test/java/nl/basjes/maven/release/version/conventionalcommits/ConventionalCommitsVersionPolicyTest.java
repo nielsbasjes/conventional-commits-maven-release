@@ -78,10 +78,10 @@ class ConventionalCommitsVersionPolicyTest {
         verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "2.0.0", "2.0.1-SNAPSHOT", major); // No Tag - Major Comments
 
         // The default tag pattern will look at the "2.3.4" tag
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "2.3.5", "2.3.6-SNAPSHOT", normal, "2.3.4", "v3.4.5"); // Tag - No CC Comments
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "2.3.5", "2.3.6-SNAPSHOT", patch, "2.3.4", "v3.4.5"); // Tag - Patch Comments
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "2.4.0", "2.4.1-SNAPSHOT", minor, "2.3.4", "v3.4.5"); // Tag - Minor Comments
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "3.0.0", "3.0.1-SNAPSHOT", major, "2.3.4", "v3.4.5"); // Tag - Major Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "2.3.5", "2.3.6-SNAPSHOT", normal, "2.3.4", "v3.4.5"); // Tag - No CC Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "2.3.5", "2.3.6-SNAPSHOT", patch, "2.3.4", "v3.4.5"); // Tag - Patch Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "2.4.0", "2.4.1-SNAPSHOT", minor, "2.3.4", "v3.4.5"); // Tag - Minor Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "3.0.0", "3.0.1-SNAPSHOT", major, "2.3.4", "v3.4.5"); // Tag - Major Comments
 
         // Too many valid version tags on one commit
         verifyNextVersionMustFail(versionRulesConfig, "1.1.1-SNAPSHOT", major, "1.1.1", "2.2.2");
@@ -106,10 +106,10 @@ class ConventionalCommitsVersionPolicyTest {
         verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "2.0.0", "2.0.1-SNAPSHOT", major); // No Tag - Major Comments
 
         // The custom tag pattern will look at the "v3.4.5" tag
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "3.4.6", "3.4.7-SNAPSHOT", normal, "2.3.4", "v3.4.5"); // Tag - No CC Comments
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "3.4.6", "3.4.7-SNAPSHOT", patch, "2.3.4", "v3.4.5"); // Tag - Patch Comments
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "3.5.0", "3.5.1-SNAPSHOT", minor, "2.3.4", "v3.4.5"); // Tag - Minor Comments
-        verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "4.0.0", "4.0.1-SNAPSHOT", major, "2.3.4", "v3.4.5"); // Tag - Major Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "3.4.6", "3.4.7-SNAPSHOT", normal, "2.3.4", "v3.4.5"); // Tag - No CC Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "3.4.6", "3.4.7-SNAPSHOT", patch, "2.3.4", "v3.4.5"); // Tag - Patch Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "3.5.0", "3.5.1-SNAPSHOT", minor, "2.3.4", "v3.4.5"); // Tag - Minor Comments
+        verifyNextVersion(versionRulesConfig, "0.0.1-SNAPSHOT", "4.0.0", "4.0.1-SNAPSHOT", major, "2.3.4", "v3.4.5"); // Tag - Major Comments
 
         // Too many valid version tags on one commit
         verifyNextVersionMustFail(versionRulesConfig, "1.1.1-SNAPSHOT", minor, "v1.1.1", "v2.2.2");

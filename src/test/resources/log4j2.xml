@@ -24,9 +24,9 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Logger name="nl.basjes.parse.useragent" level="info" additivity="false">
-      <AppenderRef ref="Console"/>
-    </Logger>
+<!--    <Logger name="nl.basjes.maven.release" level="debug" additivity="false">-->
+<!--      <AppenderRef ref="Console"/>-->
+<!--    </Logger>-->
     <Root level="info">
       <AppenderRef ref="Console"/>
     </Root>

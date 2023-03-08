@@ -29,13 +29,13 @@
   <url>https://maven.basjes.nl</url>
 
   <properties>
-    <target.java.version>1.8</target.java.version>
-    <target.java.release>8</target.java.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
-    <maven.compiler.source>${target.java.version}</maven.compiler.source>
-    <maven.compiler.target>${target.java.version}</maven.compiler.target>
-    <maven.compiler.release>${target.java.release}</maven.compiler.release>
+
+    <!-- The code must be for Java 8 -->
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.release>8</maven.compiler.release>
 
     <!-- In order for everything to work correctly we need at least this version of maven. -->
     <maven.minimal.version>3.5.2</maven.minimal.version>
@@ -89,12 +89,7 @@
 
     <cyclonedx-maven-plugin.version>2.7.5</cyclonedx-maven-plugin.version>
 
-    <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
-
-    <spring-boot.version>3.0.4</spring-boot.version>
-    <spring-boot-legacy.version>2.1.0.RELEASE</spring-boot-legacy.version>
-
-    <springdoc.version>1.6.14</springdoc.version>
+    <log4j2.version>2.20.0</log4j2.version>
 
     <!-- See http://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html-->
     <jacoco.surefireArgLine />
@@ -126,22 +121,23 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-<!--      <dependency>-->
-<!--        <groupId>org.apache.logging.log4j</groupId>-->
-<!--        <artifactId>log4j-bom</artifactId>-->
-<!--        <version>${log4j2.version}</version>-->
-<!--        <scope>import</scope>-->
-<!--        <type>pom</type>-->
-<!--      </dependency>-->
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-bom</artifactId>
+        <version>${log4j2.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
 
+    <!-- Actual dependencies for this VersionPolicy -->
     <dependency>
-      <groupId>org.apache.maven.release</groupId>
-      <artifactId>maven-release-api</artifactId>
-      <version>${maven-release-plugin.version}</version>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-xml</artifactId>
+      <version>2.14.2</version>
     </dependency>
 
     <dependency>
@@ -150,12 +146,43 @@
       <version>0.9.33</version>
     </dependency>
 
+    <!-- The context of maven and the maven-release-plugin must be provided. -->
+    <dependency>
+      <groupId>org.apache.maven.release</groupId>
+      <artifactId>maven-release-api</artifactId>
+      <version>${maven-release-plugin.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-api</artifactId>
       <version>${maven-scm-plugin.version}</version>
+      <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.inject</artifactId>
+      <version>${org-eclipse-sisu.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
+      <version>2.1.1</version>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- For testing -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -182,30 +209,17 @@
     </dependency>
 
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.20.0</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.sisu</groupId>
-      <artifactId>org.eclipse.sisu.inject</artifactId>
-      <version>${org-eclipse-sisu.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-component-annotations</artifactId>
-      <version>2.1.1</version>
-      <optional>true</optional>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.20.0</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
@@ -459,27 +473,6 @@
       </plugin>
 
       <plugin>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-maven-plugin</artifactId>
-        <version>2.1.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>xpp3-reader</goal>
-              <goal>java</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <version>3.0.0</version>
-          <packageWithVersion>false</packageWithVersion>
-          <models>
-            <model>src/main/mdo/conventionalcommits-config.mdo</model>
-          </models>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-artifact-plugin</artifactId>
         <executions>
@@ -574,6 +567,8 @@
           </compilerArgs>
           <showWarnings>true</showWarnings>
           <showDeprecation>true</showDeprecation>
+          <source>15</source>
+          <target>15</target>
         </configuration>
       </plugin>
 
@@ -608,6 +603,7 @@
           <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
           <settingsFile>src/it/mrm/settings.xml</settingsFile>
           <filterProperties>
+            <!--suppress UnresolvedMavenProperty -->
             <mrm.repository.url>${mrm.repository.url}</mrm.repository.url>
           </filterProperties>
           <debug>true</debug>
@@ -629,7 +625,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>mrm-maven-plugin</artifactId>
-        <version>1.4.1</version>
+        <version>1.5.0</version>
         <executions>
           <execution>
             <goals>

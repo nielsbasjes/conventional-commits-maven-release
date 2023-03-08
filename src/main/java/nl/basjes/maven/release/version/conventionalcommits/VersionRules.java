@@ -17,21 +17,14 @@
 
 package nl.basjes.maven.release.version.conventionalcommits;
 
-import nl.basjes.maven.release.version.conventionalcommits.config.ProjectVersionPolicyConfig;
-import nl.basjes.maven.release.version.conventionalcommits.config.io.xpp3.ConventionalCommitsVersionPolicyConfigXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.semver.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * The set of rules that determine from the commit history what the next version should be.
@@ -44,7 +37,7 @@ public class VersionRules {
     private final List<Pattern> majorUpdatePatterns = new ArrayList<>();
     private final List<Pattern> minorUpdatePatterns = new ArrayList<>();
 
-    public VersionRules(String config) {
+    public VersionRules(ConventionalCommitsVersionConfig config) {
         int patternFlags = Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNIX_LINES;
 
         // The default assumes then entire tag is what we need
@@ -55,29 +48,21 @@ public class VersionRules {
         majorUpdatePatterns.add(Pattern.compile("^BREAKING CHANGE:.*$", patternFlags));
         minorUpdatePatterns.add(Pattern.compile("^feat(?:\\([a-zA-Z\\d_-]+\\))?: .*$", patternFlags));
 
-        if (config != null && !config.trim().isEmpty()) {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(config.getBytes(UTF_8));
-            ConventionalCommitsVersionPolicyConfigXpp3Reader configReader = new ConventionalCommitsVersionPolicyConfigXpp3Reader();
-            try {
-                ProjectVersionPolicyConfig semverConfig = configReader.read(inputStream);
+        if (config != null) {
+            String semverConfigVersionTag = config.getVersionTag();
+            if (semverConfigVersionTag != null && !semverConfigVersionTag.trim().isEmpty()) {
+                tagRegex = semverConfigVersionTag;
+            }
 
-                String semverConfigVersionTag = semverConfig.getVersionTag();
-                if (semverConfigVersionTag != null && !semverConfigVersionTag.trim().isEmpty()) {
-                    tagRegex = semverConfigVersionTag;
+            if (!config.getMajorRules().isEmpty() || !config.getMinorRules().isEmpty()) {
+                majorUpdatePatterns.clear();
+                for (String majorRule : config.getMajorRules()) {
+                    majorUpdatePatterns.add(Pattern.compile(majorRule, patternFlags));
                 }
-
-                if (!semverConfig.getMajorRules().isEmpty() || !semverConfig.getMinorRules().isEmpty()) {
-                    majorUpdatePatterns.clear();
-                    for (String majorRule : semverConfig.getMajorRules()) {
-                        majorUpdatePatterns.add(Pattern.compile(majorRule, patternFlags));
-                    }
-                    minorUpdatePatterns.clear();
-                    for (String minorRule : semverConfig.getMinorRules()) {
-                        minorUpdatePatterns.add(Pattern.compile(minorRule, patternFlags));
-                    }
+                minorUpdatePatterns.clear();
+                for (String minorRule : config.getMinorRules()) {
+                    minorUpdatePatterns.add(Pattern.compile(minorRule, patternFlags));
                 }
-            } catch (IOException | XmlPullParserException e) {
-                throw new IllegalArgumentException("Unable to load the ConventionalCommitsVersionPolicyConfig: ", e);
             }
         }
         tagPattern = Pattern.compile(tagRegex, Pattern.MULTILINE);

@@ -39,11 +39,11 @@ import java.util.List;
 @Description("A VersionPolicy following the SemVer rules and looks at "
     + "the commit messages following the Conventional Commits convention.")
 public class ConventionalCommitsVersionPolicy implements VersionPolicy {
-    protected Logger logger = LoggerFactory.getLogger(ConventionalCommitsVersionPolicy.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConventionalCommitsVersionPolicy.class);
 
-    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request)
-        throws VersionParseException {
-        VersionRules versionRules = new VersionRules(request.getConfig());
+    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request) throws VersionParseException {
+        ConventionalCommitsVersionConfig versionConfig = ConventionalCommitsVersionConfig.fromXml(request.getConfig());
+        VersionRules versionRules = new VersionRules(versionConfig);
         try {
             return getReleaseVersion(
                 request,
@@ -63,12 +63,12 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
         String versionString = request.getVersion(); // The current version in the pom
         Version version;
 
-        logger.debug("--------------------------------------------------------");
-        logger.debug("Determining next ReleaseVersion");
-        logger.debug("VersionRules: \n{}", versionRules);
-        logger.debug("Pom version             : {}", versionString);
+        LOG.debug("--------------------------------------------------------");
+        LOG.debug("Determining next ReleaseVersion");
+        LOG.debug("VersionRules: \n{}", versionRules);
+        LOG.debug("Pom version             : {}", versionString);
 
-        logger.debug("Commit History          : \n{}", commitHistory);
+        LOG.debug("Commit History          : \n{}", commitHistory);
 
         Element maxElementSinceLastVersionTag = versionRules.getMaxElementSinceLastVersionTag(commitHistory);
 
@@ -77,24 +77,24 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
             // Use the latest tag we have
             versionString = commitHistoryTags.get(0);
             usingTag = true;
-            logger.debug("Version from tags       : {}", versionString);
+            LOG.debug("Version from tags       : {}", versionString);
         } else {
-            logger.debug("Version from tags       : NOT FOUND");
+            LOG.debug("Version from tags       : NOT FOUND");
         }
 
         if (maxElementSinceLastVersionTag == null) {
-            logger.debug("Step from commits       : No SCM version tags found");
+            LOG.debug("Step from commits       : No SCM version tags found");
         } else {
-            logger.debug("Step from commits       : {}", maxElementSinceLastVersionTag.name());
+            LOG.debug("Step from commits       : {}", maxElementSinceLastVersionTag.name());
         }
 
         try {
             version = Version.parse(versionString);
         } catch (IllegalArgumentException e) {
-            throw new VersionParseException(e.getMessage());
+            throw new VersionParseException(e.getMessage(), e);
         }
 
-        logger.debug("Current version         : {}", version);
+        LOG.debug("Current version         : {}", version);
 
 
         // If we have a version from the tag we use that + the calculated update.
@@ -104,20 +104,20 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
         }
 
         Version releaseVersion = version.toReleaseVersion();
-        logger.debug("Next version            : {}", releaseVersion);
-        logger.debug("--------------------------------------------------------");
+        LOG.debug("Next version            : {}", releaseVersion);
+        LOG.debug("--------------------------------------------------------");
 
         if (usingTag) {
-            logger.info("From SCM tag with version {} "
+            LOG.info("From SCM tag with version {} "
                     + "doing a {} version increase based on commit messages to version {}",
                 versionString, maxElementSinceLastVersionTag, releaseVersion);
         } else {
             if (maxElementSinceLastVersionTag == null) {
-                logger.info("From project.version {} (because we did not find any valid SCM tags) "
+                LOG.info("From project.version {} (because we did not find any valid SCM tags) "
                         + "going to version {} (because we did not find any minor/major commit messages).",
                     versionString, releaseVersion);
             } else {
-                logger.info("From project.version {} (because we did not find any valid SCM tags) "
+                LOG.info("From project.version {} (because we did not find any valid SCM tags) "
                         + "doing a {} version increase based on commit messages to version {}",
                     versionString, maxElementSinceLastVersionTag, releaseVersion);
             }
