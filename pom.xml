@@ -58,7 +58,7 @@
 
     <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-    <maven-artifact-plugin.version>3.4.0</maven-artifact-plugin.version>
+    <maven-artifact-plugin.version>3.4.1</maven-artifact-plugin.version>
     <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
     <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
@@ -268,7 +268,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-artifact-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
             <executions>
               <execution>
                 <id>compare</id>
@@ -585,7 +585,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.5.0</version>
         <executions>
           <execution>
             <id>integration-test-prepare</id>
