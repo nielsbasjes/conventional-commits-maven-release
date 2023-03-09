@@ -34,10 +34,9 @@ import static org.semver.Version.Element.MAJOR;
 import static org.semver.Version.Element.MINOR;
 import static org.semver.Version.Element.PATCH;
 
-public class NextVersionCalculationTest {
+public class NextVersionCalculationTest extends AbstractNextVersionTest {
 
-    private static ConventionalCommitsVersionPolicy versionPolicy;
-    private static final VersionRules DEFAULT_VERSION_RULES = new VersionRules(null);
+    public static ConventionalCommitsVersionPolicy versionPolicy;
 
     @BeforeAll
     public static void setUp() {
@@ -49,28 +48,10 @@ public class NextVersionCalculationTest {
         versionPolicy = null;
     }
 
-    private void assertNextVersion(VersionRules versionRules, String input, Version.Element element) {
-        switch (element) {
-            case MAJOR:
-                assertTrue(versionRules.isMajorUpdate(input));
-                // We do not care about minor and patch
-                break;
-            case MINOR:
-                assertFalse(versionRules.isMajorUpdate(input));
-                assertTrue(versionRules.isMinorUpdate(input));
-                // We do not care about patch
-                break;
-            case PATCH:
-                assertFalse(versionRules.isMajorUpdate(input));
-                assertFalse(versionRules.isMinorUpdate(input));
-                break;
-        }
-    }
-
     @Test
     void testMajorMinorPatchDetection() {
         VersionRules rules = DEFAULT_VERSION_RULES;
-        assertNextVersion(rules, "feat!(core): New feature.", MAJOR);
+        assertNextVersion(rules, "feat(core)!: New feature.", MAJOR);
         assertNextVersion(rules, "feat!: New feature.", MAJOR);
         assertNextVersion(rules, "feat(core): Foo.\n\nBREAKING CHANGE: New feature.\n", MAJOR);
         assertNextVersion(rules, "feat: Foo.\n\nBREAKING CHANGE: New feature.\n", MAJOR);
@@ -110,7 +91,7 @@ public class NextVersionCalculationTest {
     String patch1 = "Quick patch";
     String patch2 = "fix(core): Another fix.";
     String minor1 = "feat(core): New thingy.";
-    String major1 = "fix!(core): Breaking improvement";
+    String major1 = "fix(core)!: Breaking improvement";
 
     List<String> EMPTY = Collections.emptyList();
     List<String> MAJOR_MESSAGES = Arrays.asList(patch1, patch2, minor1, major1);

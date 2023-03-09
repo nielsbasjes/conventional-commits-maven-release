@@ -69,7 +69,7 @@ class ConventionalCommitsVersionPolicyTest {
         String normal = "Did something";
         String patch = "fix(core): Another fix.";
         String minor = "feat(core): New thingy.";
-        String major = "fix!(core): Breaking improvement";
+        String major = "fix(core)!: Breaking improvement";
 
         String versionRulesConfig = "";
         verifyNextVersion(versionRulesConfig, "1.1.1-SNAPSHOT", "1.1.1", "1.1.2-SNAPSHOT", normal); // No Tag - No CC Comments
@@ -92,7 +92,7 @@ class ConventionalCommitsVersionPolicyTest {
         String normal = "Did something";
         String patch = "fix(core): Another fix.";
         String minor = "feat(core): New thingy.";
-        String major = "fix!(core): Breaking improvement";
+        String major = "fix(core)!: Breaking improvement";
 
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
@@ -124,13 +124,13 @@ class ConventionalCommitsVersionPolicyTest {
 
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + "<versionTag>^The awesome ([0-9]+\\.[0-9]+\\.[0-9]+) release$</versionTag>"
-            + "<majorRules>"
-            + "<majorRule>^.*Big Change.*$</majorRule>"
-            + "</majorRules>"
-            + "<minorRules>"
-            + "<minorRule>^.*Nice Change.*$</minorRule>"
-            + "</minorRules>"
+            + "  <versionTag>^The awesome ([0-9]+\\.[0-9]+\\.[0-9]+) release$</versionTag>"
+            + "  <majorRules>"
+            + "    <majorRule>^.*Big Change.*$</majorRule>"
+            + "  </majorRules>"
+            + "  <minorRules>"
+            + "    <minorRule>^.*Nice Change.*$</minorRule>"
+            + "  </minorRules>"
             + "</projectVersionPolicyConfig>" +
             "";
 

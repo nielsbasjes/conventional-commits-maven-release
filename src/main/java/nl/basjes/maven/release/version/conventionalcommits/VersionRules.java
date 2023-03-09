@@ -44,7 +44,7 @@ public class VersionRules {
         String tagRegex = "^(\\d+\\.\\d+\\.\\d+)$";
 
         // https://www.conventionalcommits.org/en/v1.0.0/
-        majorUpdatePatterns.add(Pattern.compile("^[a-zA-Z]+!(?:\\([a-zA-Z\\d_-]+\\))?: .*$", patternFlags));
+        majorUpdatePatterns.add(Pattern.compile("^[a-zA-Z]+(?:\\([a-zA-Z\\d_-]+\\))?!: .*$", patternFlags));
         majorUpdatePatterns.add(Pattern.compile("^BREAKING CHANGE:.*$", patternFlags));
         minorUpdatePatterns.add(Pattern.compile("^feat(?:\\([a-zA-Z\\d_-]+\\))?: .*$", patternFlags));
 

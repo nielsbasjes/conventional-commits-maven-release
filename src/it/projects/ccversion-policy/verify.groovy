@@ -23,14 +23,14 @@ assert 1 == buildLog.getText().count("[INFO] Full run would be commit 1 files wi
 // The pom based version is NOT related to what the actual version will be.
 File pomXml = new File( basedir, 'pom.xml' )
 assert pomXml.exists()
-assert new XmlSlurper().parse( pomXml ).version.text() == "1.0-SNAPSHOT"
+assert new groovy.xml.XmlSlurper().parse( pomXml ).version.text() == "1.0-SNAPSHOT"
 
 // The actual version is based upon the tags and commit messages.
 File pomXmlTag = new File( basedir, 'pom.xml.tag' )
 assert pomXmlTag.exists()
-assert new XmlSlurper().parse( pomXmlTag ).version.text() == "1.3.0"
+assert new groovy.xml.XmlSlurper().parse( pomXmlTag ).version.text() == "1.3.0"
 
 // The next development version should be standard
 File pomXmlNext = new File( basedir, 'pom.xml.next' )
 assert pomXmlNext.exists()
-assert new XmlSlurper().parse( pomXmlNext ).version.text() == "1.3.1-SNAPSHOT"
+assert new groovy.xml.XmlSlurper().parse( pomXmlNext ).version.text() == "1.3.1-SNAPSHOT"
