@@ -1,6 +1,19 @@
-# IMPORTANT
-## This has to wait for the 3.0.0-M8 version of maven-release-plugin to be released.
-## Until that moment this cannot be built and/or used.
+Conventional Commits for the Maven Release Plugin
+========================================
+[![Github actions Build status](https://img.shields.io/github/actions/workflow/status/nielsbasjes/conventional-commits-maven-release/build.yml?branch=main)](https://github.com/nielsbasjes/conventional-commits-maven-release/actions)
+[![Coverage Status](https://img.shields.io/codecov/c/github/nielsbasjes/conventional-commits-maven-release)](https://app.codecov.io/gh/nielsbasjes/conventional-commits-maven-release)
+[![License](https://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Maven Central](https://img.shields.io/maven-central/v/nl.basjes.maven.release/conventional-commits-maven-release.svg)](https://central.sonatype.com/namespace/nl.basjes.maven.release)
+[![GitHub stars](https://img.shields.io/github/stars/nielsbasjes/conventional-commits-maven-release?label=GitHub%20stars)](https://github.com/nielsbasjes/conventional-commits-maven-release/stargazers)
+[![If this project has business value for you then don't hesitate to support me with a small donation.](https://img.shields.io/badge/Donations-via%20Paypal-blue.svg)](https://www.paypal.me/nielsbasjes)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
+-----------------
+# NOT YET USABLE!
+**This has to wait for the 3.0.0-M8 version of maven-release-plugin to be released.**
+
+Until that moment this cannot be built and/or used.
+
+----------------------
 
 # Introduction
 When using the [maven release plugin](https://maven.apache.org/maven-release/) you can add custom rules on how the next version is determined. Such a "next version calculation" is called a Version Policy.
@@ -94,8 +107,8 @@ Here the rules from the [Conventional Commits v1.0.0](https://www.conventionalco
     <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
 
     <!-- projectVersionPolicyConfig for the ConventionalCommitsVersionPolicy is an XML structure:  -->
-    <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
     <projectVersionPolicyConfig>
+      <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
       <versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
     </projectVersionPolicyConfig>
   </configuration>
@@ -124,19 +137,17 @@ in favour of the configuration.
     <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
 
     <!-- projectVersionPolicyConfig for the ConventionalCommitsVersionPolicy is an XML structure:  -->
-    <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
-    <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
-    <!--             the last tag. If matched the next version is at least a MINOR update.                -->
-    <!-- majorRules: A list regexes that will be matched against all lines in each commit message since   -->
-    <!--             the last tag. If matched the next version is at least a MAJOR update.                -->
-    <!-- If a match is found the commit will trigger either a minor or major version increase             -->
-    <!-- instead of only a patch increase.                                                                -->
     <projectVersionPolicyConfig>
+      <!-- versionTag: A regex with 1 capture group that MUST extract the project.version from the SCM tag. -->
       <versionTag>^v([0-9]+\.[0-9]+\.[0-9]+)$</versionTag>
+      <!-- majorRules: A list regexes that will be matched against all lines in each commit message since   -->
+      <!--             the last tag. If matched the next version is at least a MAJOR update.                -->
       <majorRules>
         <majorRule>^[a-zA-Z]+!(?:\([a-zA-Z0-9_-]+\))?: .*$</majorRule>
         <majorRule>^BREAKING CHANGE:.*$</majorRule>
       </majorRules>
+      <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
+      <!--             the last tag. If matched the next version is at least a MINOR update.                -->
       <minorRules>
         <minorRule>^feat(?:\([a-zA-Z0-9_-]+\))?: .*$</minorRule>
       </minorRules>
