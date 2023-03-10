@@ -73,7 +73,7 @@
           <projectVersionPolicyConfig>
             <versionTag>^v([0-9]+(?:\.[0-9]+(?:\.[0-9]+)?)?)$</versionTag>
             <majorRules>
-              <majorRule>^[a-zA-Z]+!(?:\([a-zA-Z0-9_-]+\))?: .*$</majorRule>
+              <majorRule>^[a-zA-Z]+(?:\([a-zA-Z0-9_-]+\))?!: .*$</majorRule>
               <majorRule>^BREAKING CHANGE:.*$</majorRule>
             </majorRules>
             <minorRules>

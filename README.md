@@ -143,7 +143,7 @@ in favour of the configuration.
       <!-- majorRules: A list regexes that will be matched against all lines in each commit message since   -->
       <!--             the last tag. If matched the next version is at least a MAJOR update.                -->
       <majorRules>
-        <majorRule>^[a-zA-Z]+!(?:\([a-zA-Z0-9_-]+\))?: .*$</majorRule>
+        <majorRule>^[a-zA-Z]+(?:\([a-zA-Z0-9_-]+\))?!: .*$</majorRule>
         <majorRule>^BREAKING CHANGE:.*$</majorRule>
       </majorRules>
       <!-- minorRules: A list regexes that will be matched against all lines in each commit message since   -->
