@@ -48,7 +48,7 @@
     <dependency-check-maven.version>8.1.2</dependency-check-maven.version>
     <dependency-convergence.phase>validate</dependency-convergence.phase>
     <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
-    <checkstyle.version>10.9.0</checkstyle.version>
+    <checkstyle.version>10.9.1</checkstyle.version>
     <apache-rat-plugin.version>0.15</apache-rat-plugin.version>
     <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
     <junit5.version>5.9.2</junit5.version>
