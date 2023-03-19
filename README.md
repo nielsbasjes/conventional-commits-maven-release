@@ -16,14 +16,14 @@ Until that moment this cannot be built and/or used.
 ----------------------
 
 # Introduction
-When using the [maven release plugin](https://maven.apache.org/maven-release/) you can add custom rules on how the next version is determined. Such a "next version calculation" is called a Version Policy.
+When using the [maven-release-plugin](https://maven.apache.org/maven-release/maven-release-plugin/) you can add custom rules on how the next version is determined. Such a "next version calculation" is called a Version Policy.
 
 This is a version policy that enforces the Semantic Versioning format and upgrades major/minor/patch element for next development version depending on the commit messages since the previous release which is detected by looking at the tags in the SCM.
 
 The default configuration follows the [Conventional Commits](https://www.conventionalcommits.org/) standard for calculating the next version.
 
 # Requirements
-This version policy requires version 3.0.0 or newer of the maven-release-plugin to be used.
+This version policy requires version 3.0.0 or newer of the [maven-release-plugin](https://maven.apache.org/maven-release/maven-release-plugin/) to be used.
 
 # How the next version is calculated
 
