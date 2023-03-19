@@ -15,8 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>conventional-commits-version-policy</artifactId>
@@ -52,14 +51,15 @@
     <!-- ============================================== -->
 
     <!-- Needed to have a consistent version in the integration tests -->
+    <maven-toolchains-plugin.version>3.1.0</maven-toolchains-plugin.version>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     <maven-release-plugin.version>3.0.0</maven-release-plugin.version>
     <maven-scm-api.version>2.0.0</maven-scm-api.version>
     <org-eclipse-sisu.version>0.3.5</org-eclipse-sisu.version>
 
-    <!-- See http://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html-->
-    <jacoco.surefireArgLine/>
-    <argLine>@{jacoco.surefireArgLine} -Xmx2048m</argLine>
+    <!-- See http://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html -->
+    <jacoco.surefireArgLine />
+
 
     <!-- Disabled for now because it gives problems quite often while downloading the CVE databases. -->
     <dependency-check.skip>true</dependency-check.skip>
@@ -69,7 +69,6 @@
     <version.license>License Apache 2.0</version.license>
     <version.url>${project.url}</version.url>
 
-    <WerrorFlag>-Werror</WerrorFlag>
   </properties>
 
   <dependencyManagement>
@@ -90,6 +89,25 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>mavenrelease1891p</id>
+      <name>MavenRelese3p</name>
+      <url>https://repository.apache.org/content/repositories/maven-1891/</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  <repositories>
+    <repository>
+      <id>mavenrelease1891</id>
+      <name>MavenRelese3</name>
+      <url>https://repository.apache.org/content/repositories/maven-1891/</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories>
 
   <dependencies>
 
@@ -328,34 +346,6 @@
       </properties>
     </profile>
 
-    <profile>
-      <id>EnableReportPlugins</id>
-      <activation>
-        <property>
-          <name>EnableReportPlugins</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.8</version>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>EnableThisWhenRunningInIntelliJIDEA</id>
-      <!-- In Intellij IDEA I get consistent failures over                                   -->
-      <!-- java: Field value processing of @ConfigurationProperty meta-data is not supported -->
-      <!-- which fails the build because we do by default '-Werror'.                         -->
-      <properties>
-        <WerrorFlag/>
-      </properties>
-    </profile>
-
   </profiles>
 
   <build>
@@ -365,7 +355,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-toolchains-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>${maven-toolchains-plugin.version}</version>
         <executions>
           <execution>
             <goals>
@@ -480,7 +470,7 @@
             </goals>
             <configuration>
               <rules>
-                <dependencyConvergence/>
+                <dependencyConvergence />
               </rules>
             </configuration>
           </execution>
@@ -504,7 +494,7 @@
             <!--   https://stackoverflow.com/questions/41944939/maven-build-failure-involving-manifest-mf-classpath-in-dependency-jars  -->
             <!--   https://stackoverflow.com/questions/1344202/bad-path-warning-where-is-it-coming-from                                 -->
             <arg>-Xlint:all,-processing,-serial,-path</arg>
-            <arg>${WerrorFlag}</arg>
+            <arg>-Werror</arg>
             <arg>-implicit:class</arg>
           </compilerArgs>
           <showWarnings>true</showWarnings>
@@ -519,6 +509,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
+          <argLine>@{jacoco.surefireArgLine} -Xmx2048m</argLine>
           <failIfNoTests>true</failIfNoTests>
         </configuration>
       </plugin>
@@ -587,7 +578,7 @@
             <mockRepo>
               <source>src/it/mrm/repository</source>
             </mockRepo>
-            <proxyRepo/>
+            <proxyRepo />
           </repositories>
         </configuration>
       </plugin>
@@ -705,7 +696,7 @@
 
           <tagNameFormat>v@{project.version}</tagNameFormat>
 
-          <preparationProfiles>prepareRelease, packageForRelease</preparationProfiles>
+          <preparationProfiles>packageForRelease</preparationProfiles>
           <preparationGoals>clean verify</preparationGoals>
           <releaseProfiles>packageForRelease,release,deployToSonatype</releaseProfiles>
           <pushChanges>false</pushChanges>

@@ -16,6 +16,7 @@
  */
 package nl.basjes.maven.release.version.conventionalcommits;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -48,7 +49,7 @@ class ConventionalCommitsVersionConfigTest {
     }
 
     @Test
-    void createAndSerdeLoopTest() {
+    void createAndSerdeLoopTest() throws JsonProcessingException {
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         ConventionalCommitsVersionConfig config1 = new ConventionalCommitsVersionConfig();
 
@@ -60,12 +61,12 @@ class ConventionalCommitsVersionConfigTest {
             .addMajorRule("Major Two")
             .addMajorRule("Major Three");
 
-        assertEquals(config, config1);
+        assertEquals(config.toString(), config1.toString());
 
         String configXml = config1.toXml();
 
         ConventionalCommitsVersionConfig config2 = ConventionalCommitsVersionConfig.fromXml(configXml);
 
-        assertEquals(config1, config2);
+        assertEquals(config1.toString(), config2.toString());
     }
 }

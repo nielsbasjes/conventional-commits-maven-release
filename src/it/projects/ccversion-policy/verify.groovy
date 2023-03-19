@@ -17,7 +17,11 @@
 
 File buildLog = new File( basedir, 'build.log' )
 assert buildLog.exists()
-assert 1 == buildLog.getText().count("[INFO] From SCM tag with version 1.2.3 doing a MINOR version increase based on commit messages to version 1.3.0")
+assert 1 == buildLog.getText().count("[INFO] Version and SCM analysis result:")
+assert 1 == buildLog.getText().count("[INFO] - Starting from SCM tag with version 1.2.3")
+assert 1 == buildLog.getText().count("[INFO] - Doing a MINOR version increase.")
+assert 1 == buildLog.getText().count("[INFO] - Next release version : 1.3.0")
+
 assert 1 == buildLog.getText().count("[INFO] Full run would be commit 1 files with message: 'ci(Release): Version v1.3.0'")
 
 // The pom based version is NOT related to what the actual version will be.

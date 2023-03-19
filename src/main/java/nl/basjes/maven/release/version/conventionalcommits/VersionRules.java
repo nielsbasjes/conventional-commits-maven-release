@@ -17,9 +17,8 @@
 
 package nl.basjes.maven.release.version.conventionalcommits;
 
+import org.apache.maven.scm.ChangeSet;
 import org.semver.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,6 @@ import java.util.regex.Pattern;
  * The set of rules that determine from the commit history what the next version should be.
  */
 public class VersionRules {
-    private static final Logger LOGGER = LoggerFactory.getLogger(VersionRules.class);
-
     private final Pattern tagPattern;
 
     private final List<Pattern> majorUpdatePatterns = new ArrayList<>();
@@ -43,7 +40,7 @@ public class VersionRules {
         // The default assumes then entire tag is what we need
         String tagRegex = "^(\\d+\\.\\d+\\.\\d+)$";
 
-        // https://www.conventionalcommits.org/en/v1.0.0/
+        // The default rules following https://www.conventionalcommits.org/en/v1.0.0/
         majorUpdatePatterns.add(Pattern.compile("^[a-zA-Z]+(?:\\([a-zA-Z\\d_-]+\\))?!: .*$", patternFlags));
         majorUpdatePatterns.add(Pattern.compile("^BREAKING CHANGE:.*$", patternFlags));
         minorUpdatePatterns.add(Pattern.compile("^feat(?:\\([a-zA-Z\\d_-]+\\))?: .*$", patternFlags));
@@ -69,25 +66,17 @@ public class VersionRules {
     }
 
     public Version.Element getMaxElementSinceLastVersionTag(CommitHistory commitHistory) {
-        boolean needMinorUpdate = false;
-        for (String change : commitHistory.getChanges()) {
-            if (isMajorUpdate(change)) {
-                LOGGER.debug("MAJOR: \"{}\"", change);
+        Version.Element maxElement = Version.Element.PATCH;
+        for (ChangeSet change : commitHistory.getChanges()) {
+            if (isMajorUpdate(change.getComment())) {
+                // This is the highest possible: Immediately done
                 return Version.Element.MAJOR;
-            } else if (isMinorUpdate(change)) {
-                LOGGER.debug("MINOR: \"{}\"", change);
-                needMinorUpdate = true;
+            } else if (isMinorUpdate(change.getComment())) {
+                // Have to wait, there may be another MAJOR one.
+                maxElement = Version.Element.MINOR;
             }
         }
-
-        if (needMinorUpdate) {
-            return Version.Element.MINOR;
-        }
-        if (commitHistory.getLastVersionTag() != null) {
-            LOGGER.debug("PATCH: Tag {}", commitHistory.getLastVersionTag());
-            return Version.Element.PATCH;
-        }
-        return null;
+        return maxElement;
     }
 
     public boolean isMajorUpdate(String input) {
@@ -112,13 +101,21 @@ public class VersionRules {
         return tagPattern;
     }
 
+    public List<Pattern> getMajorUpdatePatterns() {
+        return majorUpdatePatterns;
+    }
+
+    public List<Pattern> getMinorUpdatePatterns() {
+        return minorUpdatePatterns;
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("Conventional Commits config:\n");
         result.append("  VersionTag:\n");
         result.append("    >>>").append(tagPattern).append("<<<\n");
-        result.append("  MajorRules:\n");
+        result.append("  Major Rules:\n");
         for (Pattern majorUpdatePattern : majorUpdatePatterns) {
             result.append("    >>>").append(majorUpdatePattern).append("<<<\n");
         }

@@ -25,6 +25,8 @@ import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
 import org.apache.maven.shared.release.versions.VersionParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,47 +39,19 @@ import java.util.stream.Collectors;
  * Helper class to manage the commit history of the SCM repository.
  */
 public class CommitHistory {
-    private final List<String> changes = new ArrayList<>();
-    private final List<String> tags = new ArrayList<>();
-    private String string;
+    private final List<ChangeSet> changes = new ArrayList<>();
+    private String latestVersionTag = null;
 
-    public List<String> getChanges() {
+    public List<ChangeSet> getChanges() {
         return changes;
     }
 
-    public void addChanges(String change) {
+    public void addChanges(ChangeSet change) {
         this.changes.add(change);
     }
 
-    public void addChanges(List<String> newChanges) {
-        this.changes.addAll(newChanges);
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void addTags(List<String> newTags) {
-        if (newTags != null) {
-            newTags.forEach(this::addTags);
-        }
-    }
-
-    public void addTags(String tag) {
-        if (tag != null && !tag.isEmpty()) {
-            this.tags.add(tag);
-        }
-    }
-
     public String getLastVersionTag() {
-        if (tags.size() != 1) {
-            return null;
-        }
-        return tags.get(0);
-    }
-
-    public CommitHistory() {
-        // Default constructor which results in an empty history.
+        return latestVersionTag;
     }
 
     public CommitHistory(VersionPolicyRequest request, VersionRules versionRules)
@@ -96,23 +70,23 @@ public class CommitHistory {
             new ScmFileSet(new File(workingDirectory))
         );
 
-        List<String> logLines = new ArrayList<>();
+        Logger logger = LoggerFactory.getLogger(CommitHistory.class);
 
         int limit = 0;
-        while (getTags().isEmpty()) {
+        while (latestVersionTag == null) {
             limit += 100; // Read the repository in incremental steps of 100
             changeLogRequest.setLimit(null);
             changeLogRequest.setLimit(limit);
             changes.clear();
 
+            logger.debug("Checking the last {} commits.", limit);
+
             ChangeLogScmResult changeLog = scmProvider.changeLog(changeLogRequest);
 
-            logLines.clear();
-            logLines.add("Commit history:");
             for (ChangeSet changeSet : changeLog.getChangeLog().getChangeSets()) {
+                addChanges(changeSet);
+
                 List<String> changeSetTags = changeSet.getTags();
-                logLines.add("-- Comment: \"" + changeSet.getComment() + "\"");
-                logLines.add("   Tags   : " + changeSetTags);
                 List<String> versionTags = changeSetTags
                     .stream()
                     .map(tag -> {
@@ -121,7 +95,8 @@ public class CommitHistory {
                             return matcher.group(1);
                         }
                         return null;
-                    })
+                    }
+                    )
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -131,28 +106,34 @@ public class CommitHistory {
                         throw new VersionParseException("Most recent commit with tags has multiple version tags: "
                             + versionTags);
                     }
-                    logLines.add("-- Version tags: " + versionTags);
-                    addTags(versionTags);
+                    latestVersionTag = versionTags.get(0);
+                    logger.debug("Found tag");
                     break; // We have the last version tag
-                } else {
-                    addChanges(changeSet.getComment());
                 }
             }
-            if (changeLog.getChangeLog().getChangeSets().size() < limit) {
+            if (latestVersionTag == null &&
+                changeLog.getChangeLog().getChangeSets().size() < limit) {
                 // Apparently there are simply no more commits.
+                logger.debug("Did not find any tag");
                 break;
             }
+        }
+    }
+
+    @Override
+    public String toString() {
+        List<String> logLines = new ArrayList<>();
+
+        logLines.add("Filtered commit history:");
+        for (ChangeSet changeSet : changes) {
+            logLines.add("-- Comment: \"" + changeSet.getComment() + "\"");
+            logLines.add("   Tags   : " + changeSet.getTags());
         }
 
         StringBuilder sb = new StringBuilder();
         for (String logLine : logLines) {
             sb.append(logLine).append('\n');
         }
-        string = sb.toString();
-    }
-
-    @Override
-    public String toString() {
-        return string;
+        return sb.toString();
     }
 }

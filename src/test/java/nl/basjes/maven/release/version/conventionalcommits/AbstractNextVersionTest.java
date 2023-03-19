@@ -16,8 +16,21 @@
  */
 package nl.basjes.maven.release.version.conventionalcommits;
 
+import nl.basjes.maven.release.version.conventionalcommits.mockscm.MockScmProvider;
+import nl.basjes.maven.release.version.conventionalcommits.mockscm.MockScmRepository;
+import org.apache.maven.scm.repository.ScmRepositoryException;
+import org.apache.maven.shared.release.policy.PolicyException;
+import org.apache.maven.shared.release.policy.version.VersionPolicy;
+import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
+import org.apache.maven.shared.release.versions.VersionParseException;
 import org.semver.Version;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -45,4 +58,82 @@ public abstract class AbstractNextVersionTest {
                 fail("Unsupported element type:" + element);
         }
     }
+
+    public void verifyNextVersion(String configXml,
+                                  String currentPomVersion,
+                                  String expectedReleaseVersion,
+                                  String expectedDevelopmentVersion,
+                                  String comment,
+                                  String... tags) throws VersionParseException, PolicyException, IOException, ScmRepositoryException {
+        verifyNextVersion(currentPomVersion,
+            singletonList(comment),
+            Arrays.asList(tags),
+            configXml,
+            expectedReleaseVersion,
+            expectedDevelopmentVersion);
+    }
+
+    public void verifyNextVersion(String currentPomVersion,
+                                  List<String> comments,
+                                  String tag,
+                                  String expectedReleaseVersion) throws VersionParseException, PolicyException, IOException, ScmRepositoryException {
+        verifyNextVersion(currentPomVersion,
+            comments,
+            singletonList(tag),
+            "", // Default config
+            expectedReleaseVersion,
+            null);
+    }
+    public void verifyNextVersion(String currentPomVersion,
+                                  List<String> comments,
+                                  List<String> tags,
+                                  String configXml,
+                                  String expectedReleaseVersion,
+                                  String expectedDevelopmentVersion) throws VersionParseException, PolicyException, IOException, ScmRepositoryException {
+
+        VersionPolicyRequest request = new VersionPolicyRequest();
+        request.setVersion(currentPomVersion);
+
+        request.setWorkingDirectory("/tmp");
+
+        MockScmProvider scmProvider = new MockScmProvider(comments, tags);
+        request.setScmProvider(scmProvider);
+        request.setScmRepository(new MockScmRepository(scmProvider));
+
+        request.setConfig(configXml);
+
+        VersionPolicy versionPolicy = new ConventionalCommitsVersionPolicy();
+
+        String suggestedVersion = versionPolicy.getReleaseVersion(request).getVersion();
+        assertEquals(expectedReleaseVersion, suggestedVersion);
+
+        if (expectedDevelopmentVersion != null) {
+            request.setVersion(suggestedVersion);
+            String suggestedDevelopmentVersion = versionPolicy.getDevelopmentVersion(request).getVersion();
+            assertEquals(expectedDevelopmentVersion, suggestedDevelopmentVersion);
+        }
+
+    }
+
+    public void verifyNextVersionMustFail(
+        String versionRulesConfig,
+        String pomVersion,
+        String comments,
+        String... tags
+    ) throws PolicyException, IOException, ScmRepositoryException {
+        try {
+            verifyNextVersion(
+                pomVersion,
+                singletonList(comments),
+                Arrays.asList(tags),
+                versionRulesConfig,
+                "ignore",
+                "ignore");
+        } catch (VersionParseException vpe) {
+            // Success !
+            return;
+        }
+        fail("Should have failed");
+    }
+
 }

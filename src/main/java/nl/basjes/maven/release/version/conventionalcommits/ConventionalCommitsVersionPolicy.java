@@ -17,6 +17,7 @@
 package nl.basjes.maven.release.version.conventionalcommits;
 
 import org.apache.maven.scm.ScmException;
+import org.apache.maven.shared.release.policy.PolicyException;
 import org.apache.maven.shared.release.policy.version.VersionPolicy;
 import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
 import org.apache.maven.shared.release.policy.version.VersionPolicyResult;
@@ -29,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.List;
 
 /**
  * Uses SemVer combined with the tags and commit messages to increase the version.
@@ -41,23 +41,17 @@ import java.util.List;
 public class ConventionalCommitsVersionPolicy implements VersionPolicy {
     private static final Logger LOG = LoggerFactory.getLogger(ConventionalCommitsVersionPolicy.class);
 
-    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request) throws VersionParseException {
+    @Override
+    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request) throws VersionParseException, PolicyException {
         ConventionalCommitsVersionConfig versionConfig = ConventionalCommitsVersionConfig.fromXml(request.getConfig());
         VersionRules versionRules = new VersionRules(versionConfig);
+        CommitHistory commitHistory;
         try {
-            return getReleaseVersion(
-                request,
-                versionRules,
-                new CommitHistory(request, versionRules));
+            commitHistory = new CommitHistory(request, versionRules);
         } catch (ScmException e) {
-            throw new VersionParseException("Unable to obtain the information from the SCM history", e);
+            throw new PolicyException("Something went wrong fetching the commit history", e);
         }
-    }
 
-    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request,
-                                                 VersionRules versionRules,
-                                                 CommitHistory commitHistory)
-        throws VersionParseException {
         boolean usingTag = false;
 
         String versionString = request.getVersion(); // The current version in the pom
@@ -72,21 +66,17 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
 
         Element maxElementSinceLastVersionTag = versionRules.getMaxElementSinceLastVersionTag(commitHistory);
 
-        List<String> commitHistoryTags = commitHistory.getTags();
-        if (commitHistoryTags.size() == 1) {
+        String latestVersionTag = commitHistory.getLastVersionTag();
+        if (latestVersionTag != null) {
             // Use the latest tag we have
-            versionString = commitHistoryTags.get(0);
+            versionString = latestVersionTag;
             usingTag = true;
             LOG.debug("Version from tags       : {}", versionString);
         } else {
             LOG.debug("Version from tags       : NOT FOUND");
         }
 
-        if (maxElementSinceLastVersionTag == null) {
-            LOG.debug("Step from commits       : No SCM version tags found");
-        } else {
-            LOG.debug("Step from commits       : {}", maxElementSinceLastVersionTag.name());
-        }
+        LOG.debug("Step from commits       : {}", maxElementSinceLastVersionTag.name());
 
         try {
             version = Version.parse(versionString);
@@ -98,8 +88,8 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
 
 
         // If we have a version from the tag we use that + the calculated update.
-        // If only have the version from the current pom version with -SNAPSHOT removed.
-        if (maxElementSinceLastVersionTag != null) {
+        // If only have the version from the current pom version with -SNAPSHOT removed IF it is only a PATCH.
+        if (!(latestVersionTag == null && maxElementSinceLastVersionTag == Element.PATCH)) {
             version = version.next(maxElementSinceLastVersionTag);
         }
 
@@ -107,27 +97,28 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
         LOG.debug("Next version            : {}", releaseVersion);
         LOG.debug("--------------------------------------------------------");
 
+
+        LOG.info("Version and SCM analysis result:");
         if (usingTag) {
-            LOG.info("From SCM tag with version {} "
-                    + "doing a {} version increase based on commit messages to version {}",
-                versionString, maxElementSinceLastVersionTag, releaseVersion);
+            LOG.info("- Starting from SCM tag with version {}", versionString);
         } else {
-            if (maxElementSinceLastVersionTag == null) {
-                LOG.info("From project.version {} (because we did not find any valid SCM tags) "
-                        + "going to version {} (because we did not find any minor/major commit messages).",
-                    versionString, releaseVersion);
-            } else {
-                LOG.info("From project.version {} (because we did not find any valid SCM tags) "
-                        + "doing a {} version increase based on commit messages to version {}",
-                    versionString, maxElementSinceLastVersionTag, releaseVersion);
-            }
+            LOG.info("- Starting from project.version {} (because we did not find any valid SCM tags)", versionString);
         }
+
+        LOG.info("- Doing a {} version increase{}.",
+            maxElementSinceLastVersionTag,
+            maxElementSinceLastVersionTag == Element.PATCH
+                ? " (because we did not find any minor/major commit messages)"
+                : "");
+
+        LOG.info("- Next release version : {}", releaseVersion);
 
         VersionPolicyResult result = new VersionPolicyResult();
         result.setVersion(releaseVersion.toString());
         return result;
     }
 
+    @Override
     public VersionPolicyResult getDevelopmentVersion(VersionPolicyRequest request)
         throws VersionParseException {
         Version version;

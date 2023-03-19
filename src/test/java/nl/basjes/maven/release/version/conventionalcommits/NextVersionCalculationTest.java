@@ -16,17 +16,22 @@
  */
 package nl.basjes.maven.release.version.conventionalcommits;
 
+import org.apache.maven.scm.repository.ScmRepositoryException;
+import org.apache.maven.shared.release.policy.PolicyException;
 import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
 import org.apache.maven.shared.release.versions.VersionParseException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.semver.Version.Element.MAJOR;
 import static org.semver.Version.Element.MINOR;
 import static org.semver.Version.Element.PATCH;
@@ -48,14 +53,17 @@ public class NextVersionCalculationTest extends AbstractNextVersionTest {
     @Test
     void testMajorMinorPatchDetection() {
         VersionRules rules = DEFAULT_VERSION_RULES;
+        // Major
         assertNextVersion(rules, "feat(core)!: New feature.", MAJOR);
         assertNextVersion(rules, "feat!: New feature.", MAJOR);
         assertNextVersion(rules, "feat(core): Foo.\n\nBREAKING CHANGE: New feature.\n", MAJOR);
         assertNextVersion(rules, "feat: Foo.\n\nBREAKING CHANGE: New feature.\n", MAJOR);
 
+        // Minor
         assertNextVersion(rules, "feat(core): New feature.", MINOR);
         assertNextVersion(rules, "feat: New feature.", MINOR);
 
+        // Patch
         assertNextVersion(rules, "Does not match any pattern.", PATCH);
     }
 
@@ -68,21 +76,11 @@ public class NextVersionCalculationTest extends AbstractNextVersionTest {
         assertEquals("1.0.1-SNAPSHOT", suggestedVersion);
     }
 
-    public void verifyNextVersion(VersionRules versionRules,
-                                  String currentPomVersion,
-                                  String tag,
-                                  List<String> comments,
-                                  String expectedNextVersion) throws VersionParseException {
-        CommitHistory commitHistory = new CommitHistory();
-        commitHistory.addTags(tag);
-        commitHistory.addChanges(comments);
-
-        assertEquals(expectedNextVersion, versionPolicy
-            .getReleaseVersion(
-                new VersionPolicyRequest().setVersion(currentPomVersion),
-                versionRules,
-                commitHistory
-            ).getVersion());
+    @Test
+    void testConvertToSnapshotBadVersion() {
+        assertThrows(VersionParseException.class, () ->
+            versionPolicy.getDevelopmentVersion(new VersionPolicyRequest().setVersion("Really Bad"))
+        );
     }
 
     private static final String PATCH_1 = "Quick patch";
@@ -96,16 +94,35 @@ public class NextVersionCalculationTest extends AbstractNextVersionTest {
     private static final List<String> PATCH_MESSAGES = Arrays.asList(PATCH_1, PATCH_2);
 
     @Test
-    void testDefaultVersionRules() throws VersionParseException {
-        VersionRules rules = DEFAULT_VERSION_RULES;
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "", EMPTY, "1.2.3"); // No Tag - No CC Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "", PATCH_MESSAGES, "1.2.3"); // No Tag - Patch Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "", MINOR_MESSAGES, "1.3.0"); // No Tag - Minor Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "", MAJOR_MESSAGES, "2.0.0"); // No Tag - Major Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "2.3.4", EMPTY, "2.3.5"); // Tag - No CC Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "2.3.4", PATCH_MESSAGES, "2.3.5"); // Tag - Patch Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "2.3.4", MINOR_MESSAGES, "2.4.0"); // Tag - Minor Comments
-        verifyNextVersion(rules, "1.2.3-SNAPSHOT", "2.3.4", MAJOR_MESSAGES, "3.0.0"); // Tag - Major Comments
+    void testDefaultVersionRules() throws VersionParseException, PolicyException, IOException, ScmRepositoryException {
+        verifyNextVersion("1.2.3-SNAPSHOT", EMPTY,          "",      "1.2.3"); // No Tag - No CC Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", PATCH_MESSAGES, "",      "1.2.3"); // No Tag - Patch Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", MINOR_MESSAGES, "",      "1.3.0"); // No Tag - Minor Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", MAJOR_MESSAGES, "",      "2.0.0"); // No Tag - Major Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", EMPTY,          "2.3.4", "2.3.5"); // Tag - No CC Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", PATCH_MESSAGES, "2.3.4", "2.3.5"); // Tag - Patch Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", MINOR_MESSAGES, "2.3.4", "2.4.0"); // Tag - Minor Comments
+        verifyNextVersion("1.2.3-SNAPSHOT", MAJOR_MESSAGES, "2.3.4", "3.0.0"); // Tag - Major Comments
     }
 
+    @Test
+    void testInvalidPomVersion() {
+        assertThrows(VersionParseException.class, () ->
+            verifyNextVersion("Bad", Collections.singletonList("Nothing"), "Unmatched value", "Should fail")
+        );
+    }
+
+    @Test
+    void testInvalidTagVersion() {
+        assertThrows(VersionParseException.class, () ->
+            verifyNextVersion("1.2.3",
+                Collections.singletonList("Nothing"),
+                singletonList("Bad"),
+                "<projectVersionPolicyConfig>\n" +
+                "  <versionTag>^(Bad)$</versionTag>\n" +
+                "</projectVersionPolicyConfig>",
+                "Should fail",
+                null)
+        );
+    }
 }
