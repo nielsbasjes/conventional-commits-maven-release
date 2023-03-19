@@ -112,6 +112,14 @@ public class VersionRules {
         return tagPattern;
     }
 
+    public List<Pattern> getMajorUpdatePatterns() {
+        return majorUpdatePatterns;
+    }
+
+    public List<Pattern> getMinorUpdatePatterns() {
+        return minorUpdatePatterns;
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

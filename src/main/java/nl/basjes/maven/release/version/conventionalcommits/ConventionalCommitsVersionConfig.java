@@ -35,7 +35,7 @@ public class ConventionalCommitsVersionConfig {
         try {
             return XML_MAPPER.readValue(configXml, ConventionalCommitsVersionConfig.class);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ConventionalCommitsConfigException("Unable to read the provided config", e);
         }
     }
 
@@ -43,7 +43,7 @@ public class ConventionalCommitsVersionConfig {
         try {
             return XML_MAPPER.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ConventionalCommitsConfigException("Unable to convert the config into XML", e);
         }
     }
 
