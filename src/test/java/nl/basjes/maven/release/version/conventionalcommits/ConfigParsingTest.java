@@ -317,4 +317,25 @@ class ConfigParsingTest {
             ConventionalCommitsVersionConfig.fromXml(versionRulesConfig));
     }
 
+    @Test
+    void testVersionRulesIgnoreNullTag(){
+        ConventionalCommitsVersionConfig config = new ConventionalCommitsVersionConfig();
+        config.setVersionTag(null);
+        VersionRules versionRules = new VersionRules(config);
+        assertEquals(
+            defaultVersionRules.getTagPattern().toString(),
+            versionRules.getTagPattern().toString());
+    }
+
+    @Test
+    void testVersionRulesIgnoreBlankTag(){
+        ConventionalCommitsVersionConfig config = new ConventionalCommitsVersionConfig();
+        config.setVersionTag("       ");
+        VersionRules versionRules = new VersionRules(config);
+        assertEquals(
+            defaultVersionRules.getTagPattern().toString(),
+            versionRules.getTagPattern().toString());
+    }
+
+
 }
