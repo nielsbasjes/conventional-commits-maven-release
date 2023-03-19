@@ -9,7 +9,7 @@ Conventional Commits for the Maven Release Plugin
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 -----------------
 # NOT YET USABLE!
-**This has to wait for the 3.0.0-M8 version of maven-release-plugin to be released.**
+**This has to wait for the 3.0.0 version of maven-release-plugin to be released.**
 
 Until that moment this cannot be built and/or used.
 
@@ -23,7 +23,7 @@ This is a version policy that enforces the Semantic Versioning format and upgrad
 The default configuration follows the [Conventional Commits](https://www.conventionalcommits.org/) standard for calculating the next version.
 
 # Requirements
-This version policy requires version 3.0.0-M8 or newer of the maven-release-plugin to be used.
+This version policy requires version 3.0.0 or newer of the maven-release-plugin to be used.
 
 # How the next version is calculated
 
