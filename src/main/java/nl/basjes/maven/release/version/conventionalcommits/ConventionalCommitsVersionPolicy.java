@@ -108,9 +108,15 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
         LOG.debug("--------------------------------------------------------");
 
         if (usingTag) {
-            LOG.info("From SCM tag with version {} "
-                    + "doing a {} version increase based on commit messages to version {}",
-                versionString, maxElementSinceLastVersionTag, releaseVersion);
+            if (maxElementSinceLastVersionTag == null || maxElementSinceLastVersionTag == Element.PATCH) {
+                LOG.info("From SCM tag with version {} "
+                        + "going to version {} (because we did not find any minor/major commit messages).",
+                    versionString, releaseVersion);
+            } else {
+                LOG.info("From SCM tag with version {} "
+                        + "doing a {} version increase based on commit messages to version {}",
+                    versionString, maxElementSinceLastVersionTag, releaseVersion);
+            }
         } else {
             if (maxElementSinceLastVersionTag == null) {
                 LOG.info("From project.version {} (because we did not find any valid SCM tags) "
