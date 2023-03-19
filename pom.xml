@@ -15,7 +15,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>conventional-commits-version-policy</artifactId>
@@ -47,59 +48,18 @@
 
     <dependency-check-maven.version>8.1.2</dependency-check-maven.version>
     <dependency-convergence.phase>validate</dependency-convergence.phase>
-    <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
-    <checkstyle.version>10.9.1</checkstyle.version>
-    <apache-rat-plugin.version>0.15</apache-rat-plugin.version>
-    <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
-    <junit5.version>5.9.2</junit5.version>
-    <hamcrest-core.version>2.2</hamcrest-core.version>
 
     <!-- ============================================== -->
 
-    <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
-    <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-    <maven-artifact-plugin.version>3.4.1</maven-artifact-plugin.version>
-    <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
-    <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+    <!-- Needed to have a consistent version in the integration tests -->
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-    <maven-deploy-plugin.version>3.1.0</maven-deploy-plugin.version>
-    <maven-enforcer-plugin.version>3.2.1</maven-enforcer-plugin.version>
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-    <maven-install-plugin.version>3.1.0</maven-install-plugin.version>
-    <maven-invoker-plugin.version>3.5.0</maven-invoker-plugin.version>
-    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-    <maven-release-plugin.version>3.0.0-M8-SNAPSHOT</maven-release-plugin.version>
-    <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
-    <maven-scm-plugin.version>2.0.0</maven-scm-plugin.version>
-    <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
-    <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
-    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
-    <maven-toolchains-plugin.version>3.1.0</maven-toolchains-plugin.version>
-    <maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
-    <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
-
+    <maven-release-plugin.version>3.0.0</maven-release-plugin.version>
+    <maven-scm-api.version>2.0.0</maven-scm-api.version>
     <org-eclipse-sisu.version>0.3.5</org-eclipse-sisu.version>
 
-    <script-maven-plugin.version>1.0.0</script-maven-plugin.version>
-
-    <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
-    <maven-replacer-plugin.version>1.4.1</maven-replacer-plugin.version>
-
-    <cyclonedx-maven-plugin.version>2.7.5</cyclonedx-maven-plugin.version>
-
-    <log4j2.version>2.20.0</log4j2.version>
-
     <!-- See http://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html-->
-    <jacoco.surefireArgLine />
+    <jacoco.surefireArgLine/>
     <argLine>@{jacoco.surefireArgLine} -Xmx2048m</argLine>
-
-    <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-    <sonar.language>java</sonar.language>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 
     <!-- Disabled for now because it gives problems quite often while downloading the CVE databases. -->
     <dependency-check.skip>true</dependency-check.skip>
@@ -117,14 +77,14 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>${junit5.version}</version>
+        <version>5.9.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-bom</artifactId>
-        <version>${log4j2.version}</version>
+        <version>2.20.0</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -150,14 +110,14 @@
     <dependency>
       <groupId>org.apache.maven.release</groupId>
       <artifactId>maven-release-api</artifactId>
-      <version>${maven-release-plugin.version}</version>
+      <version>3.0.0</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-api</artifactId>
-      <version>${maven-scm-plugin.version}</version>
+      <version>${maven-scm-api.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -186,12 +146,6 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hamcrest</groupId>
-          <artifactId>hamcrest-core</artifactId>
-        </exclusion>
-      </exclusions>
       <scope>test</scope>
     </dependency>
 
@@ -202,23 +156,14 @@
     </dependency>
 
     <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>${hamcrest-core.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
-      <version>2.20.0</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.20.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -230,13 +175,11 @@
       <id>skipQuality</id>
       <properties>
         <skipTests>true</skipTests>
-        <sonar.skip>true</sonar.skip>
         <rat.skip>true</rat.skip>
         <checkstyle.skip>true</checkstyle.skip>
         <jacoco.skip>true</jacoco.skip>
         <dependency-check.skip>true</dependency-check.skip>
         <dependency-convergence.phase>none</dependency-convergence.phase>
-        <docker-based-tests.skip>true</docker-based-tests.skip>
         <invoker.skip>true</invoker.skip>
         <cyclonedx.skip>true</cyclonedx.skip>
         <gpg.skip>true</gpg.skip>
@@ -312,7 +255,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${maven-javadoc-plugin.version}</version>
+            <version>3.5.0</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -404,24 +347,12 @@
     </profile>
 
     <profile>
-      <id>SkipSonarBecauseItWasNotConfigured</id>
-      <activation>
-        <property>
-          <name>!env.SONAR_TOKEN</name>
-        </property>
-      </activation>
-      <properties>
-        <sonar.skip>true</sonar.skip>
-      </properties>
-    </profile>
-
-    <profile>
       <id>EnableThisWhenRunningInIntelliJIDEA</id>
       <!-- In Intellij IDEA I get consistent failures over                                   -->
       <!-- java: Field value processing of @ConfigurationProperty meta-data is not supported -->
       <!-- which fails the build because we do by default '-Werror'.                         -->
       <properties>
-        <WerrorFlag />
+        <WerrorFlag/>
       </properties>
     </profile>
 
@@ -434,6 +365,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-toolchains-plugin</artifactId>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <goals>
@@ -453,6 +385,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>Setup git commit hooks</id>
@@ -475,15 +408,15 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-artifact-plugin</artifactId>
+        <version>3.4.1</version>
         <executions>
-<!--      FIXME: As soon as maven-shade-plugin is good we can enable this -->
-<!--          <execution>-->
-<!--            <id>Ensure plugins are reproducible</id>-->
-<!--            <phase>validate</phase>-->
-<!--            <goals>-->
-<!--              <goal>check-buildplan</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
+          <execution>
+            <id>Ensure plugins are reproducible</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check-buildplan</goal>
+            </goals>
+          </execution>
           <execution>
             <id>Generate buildinfo</id>
             <goals>
@@ -498,7 +431,14 @@
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -512,6 +452,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>Check build environment requirements</id>
@@ -539,7 +480,7 @@
             </goals>
             <configuration>
               <rules>
-                <dependencyConvergence />
+                <dependencyConvergence/>
               </rules>
             </configuration>
           </execution>
@@ -550,6 +491,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <compilerArgs>
             <!-- Enable almost all warnings.                                                                      -->
@@ -575,11 +517,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <failIfNoTests>true</failIfNoTests>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -646,7 +587,7 @@
             <mockRepo>
               <source>src/it/mrm/repository</source>
             </mockRepo>
-            <proxyRepo />
+            <proxyRepo/>
           </repositories>
         </configuration>
       </plugin>
@@ -654,6 +595,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.0</version>
       </plugin>
 
       <plugin>
@@ -678,7 +620,7 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>${apache-rat-plugin.version}</version>
+        <version>0.15</version>
         <inherited>false</inherited>
         <executions>
           <execution>
@@ -752,6 +694,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
+        <version>${maven-release-plugin.version}</version>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
 
@@ -762,7 +705,8 @@
 
           <tagNameFormat>v@{project.version}</tagNameFormat>
 
-          <preparationGoals>-PprepareRelease -PpackageForRelease clean verify</preparationGoals>
+          <preparationProfiles>prepareRelease, packageForRelease</preparationProfiles>
+          <preparationGoals>clean verify</preparationGoals>
           <releaseProfiles>packageForRelease,release,deployToSonatype</releaseProfiles>
           <pushChanges>false</pushChanges>
           <remoteTagging>false</remoteTagging>
@@ -772,6 +716,7 @@
       <plugin>
         <groupId>org.cyclonedx</groupId>
         <artifactId>cyclonedx-maven-plugin</artifactId>
+        <version>2.7.5</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -782,128 +727,76 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.2.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.9.1</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <consoleOutput>true</consoleOutput>
+          <configLocation>devtools/checkstyle/checkstyle.xml</configLocation>
+          <suppressionsLocation>devtools/checkstyle/suppressions.xml</suppressionsLocation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+        </configuration>
+        <!-- Runs by default in the verify phase  (mvn verify or later in the build cycle)
+             the 'check' goal will fail the build if it does not pass.  "mvn checkstyle:check"
+             will do this alone, or "mvn checkstyle:checkstyle" will report but not break  -->
+        <executions>
+          <execution>
+            <id>checkstyle-check</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Coverage analysis for tests -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.8</version>
+        <executions>
+          <!--
+              Prepares the property pointing to the JaCoCo runtime agent which
+              is passed as VM argument when Maven the Surefire plugin is executed.
+          -->
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <!--
+                  Sets the name of the property containing the settings
+                  for JaCoCo runtime agent.
+              -->
+              <propertyName>jacoco.surefireArgLine</propertyName>
+            </configuration>
+          </execution>
+          <!--
+              Ensures that the code coverage report for unit tests is created after
+              unit tests have been run.
+          -->
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>${maven-checkstyle-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>com.puppycrawl.tools</groupId>
-              <artifactId>checkstyle</artifactId>
-              <version>${checkstyle.version}</version>
-            </dependency>
-          </dependencies>
-          <configuration>
-            <consoleOutput>true</consoleOutput>
-            <configLocation>devtools/checkstyle/checkstyle.xml</configLocation>
-            <suppressionsLocation>devtools/checkstyle/suppressions.xml</suppressionsLocation>
-            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          </configuration>
-          <!-- Runs by default in the verify phase  (mvn verify or later in the build cycle)
-               the 'check' goal will fail the build if it does not pass.  "mvn checkstyle:check"
-               will do this alone, or "mvn checkstyle:checkstyle" will report but not break  -->
-          <executions>
-            <execution>
-              <id>checkstyle-check</id>
-              <phase>validate</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- Coverage analysis for tests -->
-        <plugin>
-          <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>${jacoco-maven-plugin.version}</version>
-          <executions>
-            <!--
-                Prepares the property pointing to the JaCoCo runtime agent which
-                is passed as VM argument when Maven the Surefire plugin is executed.
-            -->
-            <execution>
-              <id>pre-unit-test</id>
-              <goals>
-                <goal>prepare-agent</goal>
-              </goals>
-              <configuration>
-                <!--
-                    Sets the name of the property containing the settings
-                    for JaCoCo runtime agent.
-                -->
-                <propertyName>jacoco.surefireArgLine</propertyName>
-              </configuration>
-            </execution>
-            <!--
-                Ensures that the code coverage report for unit tests is created after
-                unit tests have been run.
-            -->
-            <execution>
-              <id>post-unit-test</id>
-              <phase>test</phase>
-              <goals>
-                <goal>report</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-
-        <plugin>
-          <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>${sonar-maven-plugin.version}</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.cyclonedx</groupId>
-          <artifactId>cyclonedx-maven-plugin</artifactId>
-          <version>${cyclonedx-maven-plugin.version}</version>
-        </plugin>
-
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-antrun-plugin</artifactId><version>${maven-antrun-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-artifact-plugin</artifactId><version>${maven-artifact-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-assembly-plugin</artifactId><version>${maven-assembly-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-clean-plugin</artifactId><version>${maven-clean-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>${maven-compiler-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-deploy-plugin</artifactId><version>${maven-deploy-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-enforcer-plugin</artifactId><version>${maven-enforcer-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-failsafe-plugin</artifactId><version>${maven-failsafe-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-gpg-plugin</artifactId><version>${maven-gpg-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-install-plugin</artifactId><version>${maven-install-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-invoker-plugin</artifactId><version>${maven-invoker-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-jar-plugin</artifactId><version>${maven-jar-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-javadoc-plugin</artifactId><version>${maven-javadoc-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-release-plugin</artifactId><version>${maven-release-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-resources-plugin</artifactId><version>${maven-resources-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-scm-plugin</artifactId><version>${maven-scm-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-shade-plugin</artifactId><version>${maven-shade-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-site-plugin</artifactId><version>${maven-site-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-source-plugin</artifactId><version>${maven-source-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-toolchains-plugin</artifactId><version>${maven-toolchains-plugin.version}</version></plugin>
-        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-war-plugin</artifactId><version>${maven-war-plugin.version}</version></plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin.version}</version>
-          <configuration>
-            <failIfNoTests>true</failIfNoTests>
-          </configuration>
-        </plugin>
-
-        <plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>${build-helper-maven-plugin.version}</version></plugin>
-        <plugin><groupId>org.codehaus.mojo</groupId><artifactId>exec-maven-plugin</artifactId><version>${exec-maven-plugin.version}</version></plugin>
-        <plugin><groupId>com.google.code.maven-replacer-plugin</groupId><artifactId>maven-replacer-plugin</artifactId><version>${maven-replacer-plugin.version}</version></plugin>
-        <plugin><groupId>com.alexecollins.maven.plugin</groupId><artifactId>script-maven-plugin</artifactId><version>${script-maven-plugin.version}</version></plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <licenses>
@@ -927,8 +820,8 @@
   </developers>
 
   <scm>
-    <url>https://github.com/nielsbasjes/yauaa</url>
-    <connection>scm:git:https://github.com/nielsbasjes/yauaa.git</connection>
+    <url>https://github.com/nielsbasjes/conventional-commits-maven-release</url>
+    <connection>scm:git:https://github.com/nielsbasjes/conventional-commits-maven-release.git</connection>
     <developerConnection>scm:git:file:///${project.basedir}</developerConnection>
     <tag>HEAD</tag>
   </scm>

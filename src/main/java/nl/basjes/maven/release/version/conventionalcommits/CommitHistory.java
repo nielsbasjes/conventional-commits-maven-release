@@ -49,17 +49,17 @@ public class CommitHistory {
         this.changes.add(change);
     }
 
-    public void addChanges(List<String> changes) {
-        this.changes.addAll(changes);
+    public void addChanges(List<String> newChanges) {
+        this.changes.addAll(newChanges);
     }
 
     public List<String> getTags() {
         return tags;
     }
 
-    public void addTags(List<String> tags) {
-        if (tags != null) {
-            tags.forEach(this::addTags);
+    public void addTags(List<String> newTags) {
+        if (newTags != null) {
+            newTags.forEach(this::addTags);
         }
     }
 
@@ -115,15 +115,13 @@ public class CommitHistory {
                 logLines.add("   Tags   : " + changeSetTags);
                 List<String> versionTags = changeSetTags
                     .stream()
-                    .map(tag ->
-                        {
-                            Matcher matcher = versionRules.getTagPattern().matcher(tag);
-                            if (matcher.find()) {
-                                return matcher.group(1);
-                            }
-                            return null;
+                    .map(tag -> {
+                        Matcher matcher = versionRules.getTagPattern().matcher(tag);
+                        if (matcher.find()) {
+                            return matcher.group(1);
                         }
-                    )
+                        return null;
+                    })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 

@@ -52,11 +52,11 @@ public class MockScmProvider
         return repository;
     }
 
-    private ChangeSet changeSet(String comment, String... tags) {
+    private ChangeSet changeSet(String newComment, String... newTags) {
         ChangeSet changeSet = new ChangeSet();
-        changeSet.setComment(comment);
+        changeSet.setComment(newComment);
         changeSet.setAuthor("Someone <someone@example.nl>");
-        changeSet.setTags(Arrays.asList(tags));
+        changeSet.setTags(Arrays.asList(newTags));
         return changeSet;
     }
 

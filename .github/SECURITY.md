@@ -13,7 +13,7 @@ To report a security vulnerability, send an email to maven-security@basjes.nl .
 
 Do *not* open a public issue, send a pull request, or disclose any information about the suspected vulnerability publicly.
 If you discover any publicly disclosed security vulnerabilities, please notify us *immediately* through
-yauaa-security@basjes.nl .
+ccrelease-security@basjes.nl .
 
 ## Supported Versions
 

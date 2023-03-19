@@ -97,9 +97,9 @@ else
 fi
 
 # ----------------------------------------------------------------------------------------------------
-## Update the top of the CHANGELOG.md and website frontpage
-#vim CHANGELOG.md README.md
-#git commit -m"docs: Updated CHANGELOG and README before release" CHANGELOG.md README.md
+## Update the top of the website frontpage
+vim README.md
+git commit -m"docs: Updated README before release" README.md
 
 # ----------------------------------------------------------------------------------------------------
 info "GPG workaround: Starting"

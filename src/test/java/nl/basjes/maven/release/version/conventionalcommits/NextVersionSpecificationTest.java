@@ -16,21 +16,8 @@
  */
 package nl.basjes.maven.release.version.conventionalcommits;
 
-import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
-import org.apache.maven.shared.release.versions.VersionParseException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.semver.Version;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static nl.basjes.maven.release.version.conventionalcommits.NextVersionCalculationTest.versionPolicy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.semver.Version.Element.MAJOR;
 import static org.semver.Version.Element.MINOR;
 import static org.semver.Version.Element.PATCH;

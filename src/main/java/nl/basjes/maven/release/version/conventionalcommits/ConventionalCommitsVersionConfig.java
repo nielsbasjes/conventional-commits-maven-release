@@ -74,8 +74,8 @@ public class ConventionalCommitsVersionConfig {
         return majorRules;
     }
 
-    public ConventionalCommitsVersionConfig setVersionTag(String versionTag) {
-        this.versionTag = versionTag;
+    public ConventionalCommitsVersionConfig setVersionTag(String newVersionTag) {
+        this.versionTag = newVersionTag;
         return this;
     }
 

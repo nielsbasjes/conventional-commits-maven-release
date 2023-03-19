@@ -70,7 +70,7 @@ the rules from the [Conventional Commits v1.0.0](https://www.conventionalcommits
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-release-plugin</artifactId>
-  <version>3.0.0-M8</version>
+  <version>3.0.0</version>
   <dependencies>
     <dependency>
       <groupId>nl.basjes.maven.release</groupId>
@@ -93,7 +93,7 @@ Here the rules from the [Conventional Commits v1.0.0](https://www.conventionalco
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-release-plugin</artifactId>
-  <version>3.0.0-M8</version>
+  <version>3.0.0</version>
   <dependencies>
     <dependency>
       <groupId>nl.basjes.maven.release</groupId>
@@ -123,7 +123,7 @@ in favour of the configuration.
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-release-plugin</artifactId>
-  <version>3.0.0-M8</version>
+  <version>3.0.0</version>
   <dependencies>
     <dependency>
       <groupId>nl.basjes.maven.release</groupId>

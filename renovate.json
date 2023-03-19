@@ -25,7 +25,6 @@
       "matchPackagePrefixes": [
         "org.apache.maven.plugins",
         "org.codehaus.mojo",
-        "org.sonarsource.scanner.maven",
         "com.github.spotbugs",
         "com.google.code.maven-replacer-plugin",
         "io.fabric8",
@@ -97,7 +96,6 @@
         "org.owasp",
         "org.pitest",
         "org.jacoco",
-        "org.sonarsource",
         "com.github.spotbugs",
         "org.eluder.coveralls",
         "org.apache.rat",

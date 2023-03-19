@@ -21,22 +21,19 @@ import org.apache.maven.shared.release.versions.VersionParseException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.semver.Version;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.semver.Version.Element.MAJOR;
 import static org.semver.Version.Element.MINOR;
 import static org.semver.Version.Element.PATCH;
 
 public class NextVersionCalculationTest extends AbstractNextVersionTest {
 
-    public static ConventionalCommitsVersionPolicy versionPolicy;
+    private static ConventionalCommitsVersionPolicy versionPolicy;
 
     @BeforeAll
     public static void setUp() {
@@ -88,15 +85,15 @@ public class NextVersionCalculationTest extends AbstractNextVersionTest {
             ).getVersion());
     }
 
-    String patch1 = "Quick patch";
-    String patch2 = "fix(core): Another fix.";
-    String minor1 = "feat(core): New thingy.";
-    String major1 = "fix(core)!: Breaking improvement";
+    private static final String PATCH_1 = "Quick patch";
+    private static final String PATCH_2 = "fix(core): Another fix.";
+    private static final String MINOR_1 = "feat(core): New thingy.";
+    private static final String MAJOR_1 = "fix(core)!: Breaking improvement";
 
-    List<String> EMPTY = Collections.emptyList();
-    List<String> MAJOR_MESSAGES = Arrays.asList(patch1, patch2, minor1, major1);
-    List<String> MINOR_MESSAGES = Arrays.asList(patch1, patch2, minor1);
-    List<String> PATCH_MESSAGES = Arrays.asList(patch1, patch2);
+    private static final List<String> EMPTY = Collections.emptyList();
+    private static final List<String> MAJOR_MESSAGES = Arrays.asList(PATCH_1, PATCH_2, MINOR_1, MAJOR_1);
+    private static final List<String> MINOR_MESSAGES = Arrays.asList(PATCH_1, PATCH_2, MINOR_1);
+    private static final List<String> PATCH_MESSAGES = Arrays.asList(PATCH_1, PATCH_2);
 
     @Test
     void testDefaultVersionRules() throws VersionParseException {
