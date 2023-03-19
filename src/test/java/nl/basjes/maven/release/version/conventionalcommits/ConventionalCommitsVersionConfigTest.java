@@ -16,6 +16,7 @@
  */
 package nl.basjes.maven.release.version.conventionalcommits;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -48,7 +49,7 @@ class ConventionalCommitsVersionConfigTest {
     }
 
     @Test
-    void createAndSerdeLoopTest() {
+    void createAndSerdeLoopTest() throws JsonProcessingException {
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         ConventionalCommitsVersionConfig config1 = new ConventionalCommitsVersionConfig();
 

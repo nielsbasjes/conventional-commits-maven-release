@@ -38,12 +38,9 @@ public class ConventionalCommitsVersionConfig {
         }
     }
 
-    public String toXml() {
-        try {
-            return XML_MAPPER.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new ConventionalCommitsConfigException("Unable to convert the config into XML", e);
-        }
+    // Only need for tests
+    String toXml() throws JsonProcessingException {
+        return XML_MAPPER.writeValueAsString(this);
     }
 
     /**

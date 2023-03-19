@@ -17,6 +17,7 @@
 package nl.basjes.maven.release.version.conventionalcommits;
 
 import org.apache.maven.scm.ScmException;
+import org.apache.maven.shared.release.policy.PolicyException;
 import org.apache.maven.shared.release.policy.version.VersionPolicy;
 import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
 import org.apache.maven.shared.release.policy.version.VersionPolicyResult;
@@ -41,14 +42,14 @@ public class ConventionalCommitsVersionPolicy implements VersionPolicy {
     private static final Logger LOG = LoggerFactory.getLogger(ConventionalCommitsVersionPolicy.class);
 
     @Override
-    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request) throws VersionParseException {
+    public VersionPolicyResult getReleaseVersion(VersionPolicyRequest request) throws VersionParseException, PolicyException {
         ConventionalCommitsVersionConfig versionConfig = ConventionalCommitsVersionConfig.fromXml(request.getConfig());
         VersionRules versionRules = new VersionRules(versionConfig);
         CommitHistory commitHistory;
         try {
             commitHistory = new CommitHistory(request, versionRules);
         } catch (ScmException e) {
-            throw new RuntimeException(e);
+            throw new PolicyException("Something went wrong fetching the commit history", e);
         }
 
         boolean usingTag = false;
