@@ -34,43 +34,43 @@ class ConfigParsingTest {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private static final VersionRules DEFAULT_VERSION_RULES = new VersionRules(null);
+    private final VersionRules defaultVersionRules = new VersionRules(null);
 
-    private static final String CustomVersionTagRegex = "^The awesome ([0-9]+\\.[0-9]+\\.[0-9]+) release$";
-    private static final String CustomMajorRulesRegex = "^.*Big Change.*$";
-    private static final String CustomMinorRulesRegex = "^.*Nice Change.*$";
+    private final String customVersionTagRegex = "^The awesome ([0-9]+\\.[0-9]+\\.[0-9]+) release$";
+    private final String customMajorRulesRegex = "^.*Big Change.*$";
+    private final String customMinorRulesRegex = "^.*Nice Change.*$";
 
-    private static final String CustomVersionTagXML = "<versionTag>"+CustomVersionTagRegex+"</versionTag>";
-    private static final String CustomMajorRulesXML = "<majorRules><majorRule>"+CustomMajorRulesRegex+"</majorRule></majorRules>";
-    private static final String CustomMinorRulesXML = "<minorRules><minorRule>"+CustomMinorRulesRegex+"</minorRule></minorRules>";
+    private final String customVersionTagXML = "<versionTag>"+ customVersionTagRegex +"</versionTag>";
+    private final String customMajorRulesXML = "<majorRules><majorRule>"+ customMajorRulesRegex +"</majorRule></majorRules>";
+    private final String customMinorRulesXML = "<minorRules><minorRule>"+ customMinorRulesRegex +"</minorRule></minorRules>";
 
-    private static final int patternFlags = Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNIX_LINES;
+    private final int patternFlags = Pattern.MULTILINE | Pattern.DOTALL | Pattern.UNIX_LINES;
 
-    private static final Pattern CustomVersionTagPattern =
-        Pattern.compile(CustomVersionTagRegex, patternFlags);
-    private static final List<Pattern> CustomMajorRulesPatterns =
-        Collections.singletonList(Pattern.compile(CustomMajorRulesRegex, patternFlags));
-    private static final List<Pattern> CustomMinorRulesPatterns =
-        Collections.singletonList(Pattern.compile(CustomMinorRulesRegex, patternFlags));
+    private final Pattern customVersionTagPattern =
+        Pattern.compile(customVersionTagRegex, patternFlags);
+    private final List<Pattern> customMajorRulesPatterns =
+        Collections.singletonList(Pattern.compile(customMajorRulesRegex, patternFlags));
+    private final List<Pattern> customMinorRulesPatterns =
+        Collections.singletonList(Pattern.compile(customMinorRulesRegex, patternFlags));
 
     private void assertTagPatternIsDefault(VersionRules versionRules) {
-        assertEquals(DEFAULT_VERSION_RULES.getTagPattern().toString(), versionRules.getTagPattern().toString());
+        assertEquals(defaultVersionRules.getTagPattern().toString(), versionRules.getTagPattern().toString());
     }
 
     private void assertTagPatternIsCustom(VersionRules versionRules) {
-        assertEquals(CustomVersionTagPattern.toString(), versionRules.getTagPattern().toString());
+        assertEquals(customVersionTagPattern.toString(), versionRules.getTagPattern().toString());
     }
 
     private void assertMajorIsDefault(VersionRules versionRules) {
         assertEquals(
-            DEFAULT_VERSION_RULES.getMajorUpdatePatterns().toString(),
+            defaultVersionRules.getMajorUpdatePatterns().toString(),
             versionRules.getMajorUpdatePatterns().toString()
         );
     }
 
     private void assertMajorIsCustom(VersionRules versionRules) {
         assertEquals(
-            CustomMajorRulesPatterns.toString(),
+            customMajorRulesPatterns.toString(),
             versionRules.getMajorUpdatePatterns().toString()
         );
     }
@@ -82,14 +82,14 @@ class ConfigParsingTest {
 
     private void assertMinorIsDefault(VersionRules versionRules) {
         assertEquals(
-            DEFAULT_VERSION_RULES.getMinorUpdatePatterns().toString(),
+            defaultVersionRules.getMinorUpdatePatterns().toString(),
             versionRules.getMinorUpdatePatterns().toString()
         );
     }
 
     private void assertMinorIsCustom(VersionRules versionRules) {
         assertEquals(
-            CustomMinorRulesPatterns.toString(),
+            customMinorRulesPatterns.toString(),
             versionRules.getMinorUpdatePatterns().toString()
         );
     }
@@ -135,14 +135,14 @@ class ConfigParsingTest {
     void testParseValidTag() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomVersionTagXML
+            + customVersionTagXML
             + "</projectVersionPolicyConfig>" +
             "";
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
 
-        assertEquals(CustomVersionTagRegex, config.getVersionTag());
+        assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
         assertEquals(0, config.getMinorRules().size());
 
@@ -156,18 +156,18 @@ class ConfigParsingTest {
     void testParseValidTagMinor() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomVersionTagXML
-            + CustomMinorRulesXML
+            + customVersionTagXML
+            + customMinorRulesXML
             + "</projectVersionPolicyConfig>" +
             "";
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
 
-        assertEquals(CustomVersionTagRegex, config.getVersionTag());
+        assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
         assertEquals(1, config.getMinorRules().size());
-        assertEquals(CustomMinorRulesRegex, config.getMinorRules().get(0));
+        assertEquals(customMinorRulesRegex, config.getMinorRules().get(0));
 
         VersionRules versionRules = new VersionRules(config);
         assertTagPatternIsCustom(versionRules);
@@ -179,17 +179,17 @@ class ConfigParsingTest {
     void testParseValidTagMajor() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomVersionTagXML
-            + CustomMajorRulesXML
+            + customVersionTagXML
+            + customMajorRulesXML
             + "</projectVersionPolicyConfig>" +
             "";
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
 
-        assertEquals(CustomVersionTagRegex, config.getVersionTag());
+        assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
-        assertEquals(CustomMajorRulesRegex, config.getMajorRules().get(0));
+        assertEquals(customMajorRulesRegex, config.getMajorRules().get(0));
         assertEquals(0, config.getMinorRules().size());
 
         VersionRules versionRules = new VersionRules(config);
@@ -202,20 +202,20 @@ class ConfigParsingTest {
     void testParseValidTagMinorMajor() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomVersionTagXML
-            + CustomMajorRulesXML
-            + CustomMinorRulesXML
+            + customVersionTagXML
+            + customMajorRulesXML
+            + customMinorRulesXML
             + "</projectVersionPolicyConfig>" +
             "";
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
 
-        assertEquals(CustomVersionTagRegex, config.getVersionTag());
+        assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
-        assertEquals(CustomMajorRulesRegex, config.getMajorRules().get(0));
+        assertEquals(customMajorRulesRegex, config.getMajorRules().get(0));
         assertEquals(1, config.getMinorRules().size());
-        assertEquals(CustomMinorRulesRegex, config.getMinorRules().get(0));
+        assertEquals(customMinorRulesRegex, config.getMinorRules().get(0));
 
         VersionRules versionRules = new VersionRules(config);
         assertTagPatternIsCustom(versionRules);
@@ -227,7 +227,7 @@ class ConfigParsingTest {
     void testParseValidMinor() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomMinorRulesXML
+            + customMinorRulesXML
             + "</projectVersionPolicyConfig>" +
             "";
 
@@ -237,7 +237,7 @@ class ConfigParsingTest {
         assertNull(config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
         assertEquals(1, config.getMinorRules().size());
-        assertEquals(CustomMinorRulesRegex, config.getMinorRules().get(0));
+        assertEquals(customMinorRulesRegex, config.getMinorRules().get(0));
 
         VersionRules versionRules = new VersionRules(config);
         assertTagPatternIsDefault(versionRules);
@@ -249,7 +249,7 @@ class ConfigParsingTest {
     void testParseValidMajor() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomMajorRulesXML
+            + customMajorRulesXML
             + "</projectVersionPolicyConfig>" +
             "";
 
@@ -258,7 +258,7 @@ class ConfigParsingTest {
 
         assertNull(config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
-        assertEquals(CustomMajorRulesRegex, config.getMajorRules().get(0));
+        assertEquals(customMajorRulesRegex, config.getMajorRules().get(0));
         assertEquals(0, config.getMinorRules().size());
 
         VersionRules versionRules = new VersionRules(config);
@@ -271,8 +271,8 @@ class ConfigParsingTest {
     void testParseValidMinorMajor() {
         String versionRulesConfig = ""
             + "<projectVersionPolicyConfig>"
-            + CustomMajorRulesXML
-            + CustomMinorRulesXML
+            + customMajorRulesXML
+            + customMinorRulesXML
             + "</projectVersionPolicyConfig>" +
             "";
 
@@ -281,9 +281,9 @@ class ConfigParsingTest {
 
         assertNull(config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
-        assertEquals(CustomMajorRulesRegex, config.getMajorRules().get(0));
+        assertEquals(customMajorRulesRegex, config.getMajorRules().get(0));
         assertEquals(1, config.getMinorRules().size());
-        assertEquals(CustomMinorRulesRegex, config.getMinorRules().get(0));
+        assertEquals(customMinorRulesRegex, config.getMinorRules().get(0));
 
         VersionRules versionRules = new VersionRules(config);
         assertTagPatternIsDefault(versionRules);
