@@ -163,6 +163,12 @@ else
     pass "Build is reproducible."
 fi
 
+
+
+
+pass "Looking good! "
+exit
+
 # ----------------------------------------------------------------------------------------------------
 # Actually run the release: Effectively mvn deploy towards Sonatype
 info "Doing release:perform"
