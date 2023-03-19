@@ -101,6 +101,12 @@ class ConfigParsingTest {
     // ====================================================
 
     @Test
+    void testVersionRulesToString() {
+        String string = defaultVersionRules.toString();
+        assertTrue(string.contains("Conventional Commits config:"));
+    }
+
+    @Test
     void testParseNull() {
         assertNull(ConventionalCommitsVersionConfig.fromXml(null));
     }

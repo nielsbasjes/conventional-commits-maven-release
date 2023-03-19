@@ -22,7 +22,7 @@ import static org.semver.Version.Element.MAJOR;
 import static org.semver.Version.Element.MINOR;
 import static org.semver.Version.Element.PATCH;
 
-public class NextVersionSpecificationTest extends AbstractNextVersionTest {
+class NextVersionSpecificationTest extends AbstractNextVersionTest {
 
     @Test
     void testConventionalCommitsExamples() {

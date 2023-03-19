@@ -22,7 +22,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @JacksonXmlRootElement(localName = "ProjectVersionPolicyConfig")
 public class ConventionalCommitsVersionConfig {
@@ -79,16 +78,6 @@ public class ConventionalCommitsVersionConfig {
         return this;
     }
 
-    public ConventionalCommitsVersionConfig clearMinorRules() {
-        minorRules.clear();
-        return this;
-    }
-
-    public ConventionalCommitsVersionConfig clearMajorRules() {
-        majorRules.clear();
-        return this;
-    }
-
     public ConventionalCommitsVersionConfig addMinorRule(String newRule) {
         minorRules.add(newRule);
         return this;
@@ -97,25 +86,6 @@ public class ConventionalCommitsVersionConfig {
     public ConventionalCommitsVersionConfig addMajorRule(String newRule) {
         majorRules.add(newRule);
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ConventionalCommitsVersionConfig)) {
-            return false;
-        }
-        ConventionalCommitsVersionConfig that = (ConventionalCommitsVersionConfig) o;
-        return Objects.equals(versionTag, that.versionTag)
-            && Objects.equals(minorRules,  that.minorRules)
-            && Objects.equals(majorRules,  that.majorRules);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(versionTag, minorRules, majorRules);
     }
 
     @Override

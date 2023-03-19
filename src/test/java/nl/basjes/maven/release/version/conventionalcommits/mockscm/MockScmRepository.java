@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.basjes.maven.release.version.conventionalcommits;
+package nl.basjes.maven.release.version.conventionalcommits.mockscm;
 
+import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.repository.ScmRepository;
+import org.apache.maven.scm.repository.ScmRepositoryException;
 
 public class MockScmRepository extends ScmRepository {
-    public MockScmRepository(MockScmProvider provider) {
+    public MockScmRepository(ScmProvider provider) throws ScmRepositoryException {
         super("dummy", provider.makeProviderScmRepository("dummy", ':'));
     }
 }
