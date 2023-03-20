@@ -90,25 +90,6 @@
     </dependencies>
   </dependencyManagement>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>mavenrelease1891p</id>
-      <name>MavenRelese3p</name>
-      <url>https://repository.apache.org/content/repositories/maven-1891/</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-  <repositories>
-    <repository>
-      <id>mavenrelease1891</id>
-      <name>MavenRelese3</name>
-      <url>https://repository.apache.org/content/repositories/maven-1891/</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-  </repositories>
-
   <dependencies>
 
     <!-- Actual dependencies for this VersionPolicy -->
@@ -128,7 +109,7 @@
     <dependency>
       <groupId>org.apache.maven.release</groupId>
       <artifactId>maven-release-api</artifactId>
-      <version>3.0.0</version>
+      <version>${maven-release-plugin.version}</version>
       <scope>provided</scope>
     </dependency>
 
