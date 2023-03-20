@@ -7,7 +7,6 @@ Conventional Commits for the Maven Release Plugin
 [![GitHub stars](https://img.shields.io/github/stars/nielsbasjes/conventional-commits-maven-release?label=GitHub%20stars)](https://github.com/nielsbasjes/conventional-commits-maven-release/stargazers)
 [![If this project has business value for you then don't hesitate to support me with a small donation.](https://img.shields.io/badge/Donations-via%20Paypal-blue.svg)](https://www.paypal.me/nielsbasjes)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
------------------
 
 # Introduction
 When using the [maven-release-plugin](https://maven.apache.org/maven-release/maven-release-plugin/) you can add custom rules on how the next version is determined. Such a "next version calculation" is called a Version Policy.

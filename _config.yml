@@ -1,1 +1,3 @@
 theme: jekyll-theme-leap-day
+title: 'Conventional Commits for the Maven Release Plugin'
+description: 'A version policy for the maven-release-plugin that uses the Conventional Commits pattern.'
