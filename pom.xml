@@ -624,9 +624,9 @@
             <exclude>**/*.diff</exclude>
             <!-- Documentation -->
             <exclude>documentation/**</exclude>
-            <!-- Raw benchmark results -->
-            <exclude>benchmarks/results/*.txt</exclude>
             <!-- Files that cannot be 'polluted' -->
+            <exclude>_config.yml</exclude>
+            <exclude>CNAME</exclude>
             <exclude>.github/**</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/*.ndjson</exclude>
