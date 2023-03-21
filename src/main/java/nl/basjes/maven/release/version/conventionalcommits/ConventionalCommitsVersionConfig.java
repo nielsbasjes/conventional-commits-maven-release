@@ -19,6 +19,7 @@ package nl.basjes.maven.release.version.conventionalcommits;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,13 @@ public class ConventionalCommitsVersionConfig {
         if (configXml == null || configXml.trim().isEmpty()) {
             return null;
         }
+        // NOTE: If the provided config still contains the property that should have been
+        // interpolated there is no option to retrieve it. So we simply assume it is an empty string.
+        configXml = configXml.replace("${projectVersionPolicyConfig}", "");
         try {
+            LoggerFactory
+                .getLogger(ConventionalCommitsVersionConfig.class)
+                .debug("ConventionalCommitsVersionConfig XML: \n{}", configXml);
             return XML_MAPPER.readValue(configXml, ConventionalCommitsVersionConfig.class);
         } catch (JsonProcessingException e) {
             throw new ConventionalCommitsConfigException("Unable to read the provided config", e);

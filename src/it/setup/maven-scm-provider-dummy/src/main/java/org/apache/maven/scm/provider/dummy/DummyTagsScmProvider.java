@@ -97,7 +97,7 @@ public class DummyTagsScmProvider
                 changeSet( "Commit  5" ),
                 changeSet( "Commit  4" ),
                 changeSet( "Commit  3" ),
-                changeSet( "Commit  2", "v1.2.3" ), // For Conventional Commits.
+                changeSet( "Commit  2", "v1.2.3", "4.5.6" ), // For Conventional Commits.
                 changeSet( "Commit  1" ),
                 changeSet( "Commit  0" )
             ), from, to
