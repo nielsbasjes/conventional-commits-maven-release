@@ -98,8 +98,8 @@ fi
 
 # ----------------------------------------------------------------------------------------------------
 ## Update the top of the website frontpage
-vim README.md
-git commit -m"docs: Updated README before release" README.md
+#vim README.md
+#git commit -m"docs: Updated README before release" README.md
 
 # ----------------------------------------------------------------------------------------------------
 info "GPG workaround: Starting"
@@ -124,7 +124,7 @@ trap killSigner SIGINT
 # ----------------------------------------------------------------------------------------------------
 ## Prepare the release: Make releasable version and make tag.
 info "Doing release:prepare"
-mvn release:prepare
+mvn release:prepare -B
 prepareStatus=$?
 if [ ${prepareStatus} -ne 0 ];
 then
