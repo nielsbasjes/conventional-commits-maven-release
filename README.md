@@ -4,6 +4,7 @@ Conventional Commits for the Maven Release Plugin
 [![Coverage Status](https://img.shields.io/codecov/c/github/nielsbasjes/conventional-commits-maven-release)](https://app.codecov.io/gh/nielsbasjes/conventional-commits-maven-release)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Maven Central](https://img.shields.io/maven-central/v/nl.basjes.maven.release/conventional-commits-version-policy.svg)](https://central.sonatype.com/namespace/nl.basjes.maven.release)
+[![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-success?labelColor=1e5b96)](https://github.com/jvm-repo-rebuild/reproducible-central#nl.basjes.maven.release:conventional-commits-version-policy)
 [![GitHub stars](https://img.shields.io/github/stars/nielsbasjes/conventional-commits-maven-release?label=GitHub%20stars)](https://github.com/nielsbasjes/conventional-commits-maven-release/stargazers)
 [![If this project has business value for you then don't hesitate to support me with a small donation.](https://img.shields.io/badge/Donations-via%20Paypal-blue.svg)](https://www.paypal.me/nielsbasjes)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
