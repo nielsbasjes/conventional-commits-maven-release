@@ -503,7 +503,7 @@
           <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-xml</artifactId>
-            <version>4.0.10</version>
+            <version>4.0.11</version>
           </dependency>
         </dependencies>
         <executions>
