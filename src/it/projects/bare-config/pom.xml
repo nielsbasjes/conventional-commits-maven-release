@@ -58,6 +58,11 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>@maven-release-plugin.version@</version>
         <configuration>
+          <allowReleasePluginSnapshot>true</allowReleasePluginSnapshot>
+          <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
+          <pushChanges>false</pushChanges>
+          <remoteTagging>false</remoteTagging>
+
           <projectVersionPolicyId>ConventionalCommitsVersionPolicy</projectVersionPolicyId>
         </configuration>
         <dependencies>
