@@ -20,7 +20,7 @@ import org.apache.maven.scm.ChangeSet;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.command.changelog.ChangeLogScmRequest;
-import org.apache.maven.scm.command.changelog.ChangeLogScmResult;
+import org.apache.maven.scm.command.changelog.ChangeLogSet;
 import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
@@ -81,9 +81,13 @@ public class CommitHistory {
 
             logger.debug("Checking the last {} commits.", limit);
 
-            ChangeLogScmResult changeLog = scmProvider.changeLog(changeLogRequest);
+            ChangeLogSet changeLogSet = scmProvider.changeLog(changeLogRequest).getChangeLog();
+            if (changeLogSet == null) {
+                return;
+            }
+            List<ChangeSet> changeSets = changeLogSet.getChangeSets();
 
-            for (ChangeSet changeSet : changeLog.getChangeLog().getChangeSets()) {
+            for (ChangeSet changeSet : changeSets) {
                 addChanges(changeSet);
 
                 List<String> changeSetTags = changeSet.getTags();
@@ -112,7 +116,7 @@ public class CommitHistory {
                 }
             }
             if (latestVersionTag == null &&
-                changeLog.getChangeLog().getChangeSets().size() < limit) {
+                changeSets.size() < limit) {
                 // Apparently there are simply no more commits.
                 logger.debug("Did not find any tag");
                 break;
