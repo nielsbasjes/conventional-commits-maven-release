@@ -510,7 +510,7 @@
           <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-xml</artifactId>
-            <version>4.0.12</version>
+            <version>4.0.13</version>
           </dependency>
         </dependencies>
         <executions>
