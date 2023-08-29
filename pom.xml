@@ -678,7 +678,7 @@
             <groupId>nl.basjes.maven.release</groupId>
             <artifactId>conventional-commits-version-policy</artifactId>
             <!-- Can only use an earlier release of self, updated using Renovate -->
-            <version>1.0.3</version>
+            <version>1.0.4</version>
           </dependency>
         </dependencies>
         <configuration>
