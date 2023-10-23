@@ -395,15 +395,6 @@
               <goal>check-buildplan</goal>
             </goals>
           </execution>
-          <execution>
-            <id>Generate buildinfo</id>
-            <goals>
-              <goal>buildinfo</goal>
-            </goals>
-            <configuration>
-              <attach>true</attach>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
 
