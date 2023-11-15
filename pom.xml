@@ -45,7 +45,7 @@
 
     <!-- ============================================== -->
 
-    <dependency-check-maven.version>8.4.2</dependency-check-maven.version>
+    <dependency-check-maven.version>8.4.3</dependency-check-maven.version>
     <dependency-convergence.phase>validate</dependency-convergence.phase>
 
     <!-- ============================================== -->
@@ -718,7 +718,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>10.12.4</version>
+            <version>10.12.5</version>
           </dependency>
         </dependencies>
         <configuration>
