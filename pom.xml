@@ -45,7 +45,7 @@
 
     <!-- ============================================== -->
 
-    <dependency-check-maven.version>9.0.1</dependency-check-maven.version>
+    <dependency-check-maven.version>9.0.2</dependency-check-maven.version>
     <dependency-convergence.phase>validate</dependency-convergence.phase>
 
     <!-- ============================================== -->
