@@ -589,7 +589,7 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>0.16</version>
+        <version>0.16.1</version>
         <inherited>false</inherited>
         <executions>
           <execution>
@@ -718,7 +718,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>10.12.7</version>
+            <version>10.13.0</version>
           </dependency>
         </dependencies>
         <configuration>
