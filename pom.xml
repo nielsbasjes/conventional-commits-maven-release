@@ -52,7 +52,7 @@
 
     <!-- Needed to have a consistent version in the integration tests -->
     <maven-toolchains-plugin.version>3.2.0</maven-toolchains-plugin.version>
-    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
     <maven-scm-api.version>2.1.0</maven-scm-api.version>
     <org-eclipse-sisu.version>0.3.5</org-eclipse-sisu.version>
