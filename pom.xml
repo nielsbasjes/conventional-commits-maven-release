@@ -193,23 +193,6 @@
     </profile>
 
     <profile>
-      <id>useLocalReproduceRepo</id>
-      <properties>
-        <!--suppress UnresolvedMavenProperty -->
-        <altReleaseDeploymentRepository>localReproduceRepo::file://${maven.multiModuleProjectDirectory}/__tmp_deploy/</altReleaseDeploymentRepository>
-        <!--suppress UnresolvedMavenProperty -->
-        <altSnapshotDeploymentRepository>localReproduceRepo::file://${maven.multiModuleProjectDirectory}/__tmp_deploy/</altSnapshotDeploymentRepository>
-      </properties>
-      <repositories>
-        <repository>
-          <id>localReproduceRepo</id>
-          <!--suppress UnresolvedMavenProperty -->
-          <url>file://${maven.multiModuleProjectDirectory}/__tmp_deploy/</url>
-        </repository>
-      </repositories>
-    </profile>
-
-    <profile>
       <id>artifactCompare</id>
       <build>
         <defaultGoal>clean verify</defaultGoal>
@@ -272,66 +255,22 @@
             </executions>
           </plugin>
 
+          <!-- https://central.sonatype.org/publish/publish-portal-maven/ -->
           <plugin>
-            <!-- explicitly define maven-deploy-plugin after other to force exec order -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-deploy-plugin</artifactId>
-            <version>3.1.4</version>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.7.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+<!--              <autoPublish>true</autoPublish>-->
+<!--              <waitUntil>published</waitUntil>-->
+              <waitUntil>validated</waitUntil>
+            </configuration>
           </plugin>
 
         </plugins>
       </build>
-    </profile>
-
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <!-- Description: https://github.com/git-commit-id/git-commit-id-maven-plugin -->
-            <groupId>io.github.git-commit-id</groupId>
-            <artifactId>git-commit-id-maven-plugin</artifactId>
-            <version>${git-commit-id-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>Validate-Revision-Information</id>
-                <phase>validate</phase>
-                <goals>
-                  <goal>validateRevision</goal>
-                </goals>
-                <configuration>
-                  <validationProperties>
-                    <!-- verify that the current repository is not dirty -->
-                    <validationProperty>
-                      <name>Don't try to release if something has not yet been committed.</name>
-                      <!--suppress UnresolvedMavenProperty -->
-                      <value>${git.dirty}</value>
-                      <shouldMatchTo>false</shouldMatchTo>
-                    </validationProperty>
-                    <!-- verify that the current commit has a tag -->
-                    <validationProperty>
-                      <name>validating current commit has a tag</name>
-                      <!--suppress UnresolvedMavenProperty -->
-                      <value>${git.closest.tag.commit.count}</value>
-                      <shouldMatchTo>0</shouldMatchTo>
-                    </validationProperty>
-                  </validationProperties>
-                  <validationShouldFailIfNoMatch>true</validationShouldFailIfNoMatch>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>deployToSonatype</id>
-      <properties>
-        <altReleaseDeploymentRepository>sonatype::https://oss.sonatype.org/service/local/staging/deploy/maven2/</altReleaseDeploymentRepository>
-        <altSnapshotDeploymentRepository>sonatype::https://oss.sonatype.org/content/repositories/snapshots</altSnapshotDeploymentRepository>
-      </properties>
     </profile>
 
   </profiles>
@@ -555,12 +494,6 @@
             <proxyRepo />
           </repositories>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.1.4</version>
       </plugin>
 
       <plugin>

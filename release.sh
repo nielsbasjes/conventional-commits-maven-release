@@ -24,7 +24,7 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 echo "PWD: ${SCRIPTDIR}"
 
-cd "${SCRIPTDIR}/.." || ( echo "This should not be possible" ; exit 1 )
+cd "${SCRIPTDIR}" || ( echo "This should not be possible" ; exit 1 )
 
 # Working directory is now the root of the project
 
@@ -97,6 +97,14 @@ else
 fi
 
 # ----------------------------------------------------------------------------------------------------
+# Forcing a manual gpg signing action to ensure the password is known
+(
+  cd /tmp || die "Unable to enter /tmp"
+  echo x > ReleaseProcess-$$.txt
+  gpg --clearsign ReleaseProcess-$$.txt
+  rm ReleaseProcess-$$.txt ReleaseProcess-$$.txt.asc
+)
+
 info "GPG workaround: Starting"
 runGpgSignerInBackGround(){
   while : ; do date ; echo "test" | gpg --clearsign ; sleep 10s ; done
@@ -117,13 +125,81 @@ trap killSigner EXIT
 trap killSigner SIGINT
 
 # ----------------------------------------------------------------------------------------------------
-info "Publishing SNAPSHOT"
-mvn clean deploy -PpackageForRelease -PdeployToSonatype
-snapshotPublishStatus=$?
-if [ ${snapshotPublishStatus} -ne 0 ];
+## Prepare the release: Make releasable version and make tag.
+info "Doing release:prepare"
+mvn release:prepare -B
+prepareStatus=$?
+if [ ${prepareStatus} -ne 0 ];
 then
-    fail "Publishing SNAPSHOT failed."
-    exit ${snapshotPublishStatus}
+    fail "Release prepare failed."
+    exit ${prepareStatus}
 else
-    pass "Publishing SNAPSHOT Success."
+    pass "Release prepare Success."
 fi
+
+# ----------------------------------------------------------------------------------------------------
+# Check if build for this tag is reproducible
+git checkout "$(git describe --abbrev=0)"
+# ----------------------------------------------------------------------------------------------------
+info "Publishing for reproduction check to Local repo"
+mvn clean install -PpackageForRelease -PskipQuality
+reproCheckPublishStatus=$?
+if [ ${reproCheckPublishStatus} -ne 0 ];
+then
+    git switch -
+    fail "Publishing for reproduction check failed."
+    exit ${reproCheckPublishStatus}
+else
+    pass "Publishing for reproduction check Success."
+fi
+
+# ----------------------------------------------------------------------------------------------------
+info "Checking build reproducibility ... "
+mvn clean verify -PpackageForRelease -PskipQuality -PartifactCompare
+reproducibleStatus=$?
+git switch -
+if [ ${reproducibleStatus} -ne 0 ];
+then
+    fail "Build is NOT reproducible."
+    exit ${reproducibleStatus}
+else
+    pass "Build is reproducible."
+fi
+
+# ----------------------------------------------------------------------------------------------------
+# Actually run the release: Effectively mvn deploy towards Sonatype
+info "Doing release:perform"
+mvn release:perform
+performStatus=$?
+if [ ${performStatus} -ne 0 ];
+then
+    fail "Release perform failed."
+    exit ${performStatus}
+else
+    pass "Release perform Success."
+fi
+
+# ----------------------------------------------------------------------------------------------------
+#
+# Now check SONATYPE
+#
+RELEASEVERSION=$(git describe --abbrev=0| sed 's/^v//')
+
+info "Now verify Sonatype to release version ${RELEASEVERSION}"
+info "Go to https://central.sonatype.com/publishing/deployments"
+warn "Press any key abort or 'c' to continue and update the website"
+read -n 1 k <&1
+if [[ $k = c ]] ;
+then
+  pass "Release worked, pushing results"
+else
+  die "Aborting, nothing was pushed."
+fi
+
+warn "Now go and manually push it all"
+
+# ----------------------------------------------------------------------------------------------------
+echo "git push"
+echo "git push --tags"
+
+# ----------------------------------------------------------------------------------------------------
