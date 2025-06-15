@@ -17,8 +17,8 @@ ccrelease-security@basjes.nl .
 
 ## Supported Versions
 
-Depending on the severity of a vulnerability the issue may be fixed in the current `major.minor` release of this software, or
-for lower severity vulnerabilities or hardening in the following `major.minor` release.
+Depending on the severity of a vulnerability the issue may be fixed in the current `major.minor.patch` release of this software, or
+for lower severity vulnerabilities or hardening in the following `major.minor.patch` release.
 
 ## Automatic updates
 
