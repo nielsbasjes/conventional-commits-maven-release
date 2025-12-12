@@ -22,7 +22,7 @@ assert 1 == buildLog.getText().count("[INFO] - Starting from SCM tag with versio
 assert 1 == buildLog.getText().count("[INFO] - Doing a MINOR version increase.")
 assert 1 == buildLog.getText().count("[INFO] - Next release version : 4.6.0")
 
-assert 1 == buildLog.getText().count("[INFO] Full run would be commit 1 files with message: '[maven-release-plugin] prepare release ccversion-policy-4.6.0'")
+assert 1 == buildLog.getText().count("[INFO] Full run would be commit 1 files with message: '[maven-release-plugin] prepare release ccversion-policy-4.6.0")
 
 // The pom based version is NOT related to what the actual version will be.
 File pomXml = new File( basedir, 'pom.xml' )
