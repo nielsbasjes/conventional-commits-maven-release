@@ -50,6 +50,7 @@ jobs:
         java-version: |
           8
           17
+          25
 
     - name: 'Build'
       run: mvn clean install
