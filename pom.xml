@@ -55,7 +55,7 @@
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
     <maven-scm-api.version>2.2.1</maven-scm-api.version>
-    <org-eclipse-sisu.version>0.3.5</org-eclipse-sisu.version>
+    <org-eclipse-sisu.version>1.0.0</org-eclipse-sisu.version>
 
     <!-- See http://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html -->
     <jacoco.surefireArgLine />
@@ -114,13 +114,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-api</artifactId>
-      <version>${maven-scm-api.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
       <version>1</version>
@@ -132,13 +125,6 @@
       <artifactId>org.eclipse.sisu.inject</artifactId>
       <version>${org-eclipse-sisu.version}</version>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-component-annotations</artifactId>
-      <version>2.2.0</version>
-      <optional>true</optional>
     </dependency>
 
     <!-- For testing -->
@@ -333,6 +319,21 @@
             <phase>validate</phase>
             <goals>
               <goal>check-buildplan</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.sisu</groupId>
+        <artifactId>sisu-maven-plugin</artifactId>
+        <version>${org-eclipse-sisu.version}</version>
+        <executions>
+          <execution>
+            <id>index-project</id>
+            <goals>
+              <goal>main-index</goal>
+              <goal>test-index</goal>
             </goals>
           </execution>
         </executions>
