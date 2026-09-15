@@ -103,6 +103,12 @@
       <groupId>org.semver</groupId>
       <artifactId>api</artifactId>
       <version>0.9.33</version>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- The context of maven and the maven-release-plugin must be provided. -->
