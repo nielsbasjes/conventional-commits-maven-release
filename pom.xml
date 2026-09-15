@@ -518,41 +518,41 @@
         <configuration>
           <consoleOutput>true</consoleOutput>
           <excludeSubProjects>false</excludeSubProjects>
-          <excludes>
+          <inputExcludes>
             <!-- Build config files -->
-            <exclude>.mvn/jvm.config</exclude>
+            <inputExclude>.mvn/jvm.config</inputExclude>
             <!-- Version control files -->
-            <exclude>**/.git/**</exclude>
-            <exclude>**/.gitignore</exclude>
-            <exclude>**/.gitmodules</exclude>
-            <exclude>devtools/git-hooks/commit-msg.d/sailr.sh</exclude>
+            <inputExclude>**/.git/**</inputExclude>
+            <inputExclude>**/.gitignore</inputExclude>
+            <inputExclude>**/.gitmodules</inputExclude>
+            <inputExclude>devtools/git-hooks/commit-msg.d/sailr.sh</inputExclude>
             <!-- IDE settings and files -->
-            <exclude>**/.classpath</exclude>
-            <exclude>**/.project</exclude>
-            <exclude>**/.settings/**</exclude>
-            <exclude>**/.idea/**</exclude>
-            <exclude>**/*.iml</exclude>
-            <exclude>**/.run/**</exclude>
-            <exclude>**/*.patch</exclude>
-            <exclude>**/*.diff</exclude>
+            <inputExclude>**/.classpath</inputExclude>
+            <inputExclude>**/.project</inputExclude>
+            <inputExclude>**/.settings/**</inputExclude>
+            <inputExclude>**/.idea/**</inputExclude>
+            <inputExclude>**/*.iml</inputExclude>
+            <inputExclude>**/.run/**</inputExclude>
+            <inputExclude>**/*.patch</inputExclude>
+            <inputExclude>**/*.diff</inputExclude>
             <!-- Documentation -->
-            <exclude>documentation/**</exclude>
+            <inputExclude>documentation/**</inputExclude>
             <!-- Files that cannot be 'polluted' -->
-            <exclude>docs/_config.yml</exclude>
-            <exclude>docs/CNAME</exclude>
-            <exclude>.github/**</exclude>
-            <exclude>**/*.json</exclude>
-            <exclude>**/*.ndjson</exclude>
+            <inputExclude>docs/_config.yml</inputExclude>
+            <inputExclude>docs/CNAME</inputExclude>
+            <inputExclude>.github/**</inputExclude>
+            <inputExclude>**/*.json</inputExclude>
+            <inputExclude>**/*.ndjson</inputExclude>
             <!-- Files generated during build and/or development -->
-            <exclude>**/target/**</exclude>
-            <exclude>**/dependency-reduced-pom.xml</exclude>
+            <inputExclude>**/target/**</inputExclude>
+            <inputExclude>**/dependency-reduced-pom.xml</inputExclude>
             <!-- Other files -->
-            <exclude>ReleaseProcedure.txt</exclude>
-            <exclude>**/.~lock.*</exclude>
+            <inputExclude>ReleaseProcedure.txt</inputExclude>
+            <inputExclude>**/.~lock.*</inputExclude>
             <!-- Test scripts -->
-            <exclude>*.sh</exclude>
-            <exclude>**/_*/**</exclude>
-          </excludes>
+            <inputExclude>*.sh</inputExclude>
+            <inputExclude>**/_*/**</inputExclude>
+          </inputExcludes>
         </configuration>
       </plugin>
 
