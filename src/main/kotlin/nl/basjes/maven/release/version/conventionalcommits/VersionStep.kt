@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package nl.basjes.maven.release.version.conventionalcommits
 
-package nl.basjes.maven.release.version.conventionalcommits;
+enum class VersionStep(val toStringName: String) {
+    MAJOR("MAJOR"),
+    MINOR("MINOR"),
+    PATCH("PATCH"), ;
 
-public class ConventionalCommitsConfigException extends RuntimeException {
-    public ConventionalCommitsConfigException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    override fun toString() = toStringName
 }

@@ -16,6 +16,12 @@ This is a version policy that enforces the Semantic Versioning format and upgrad
 
 The default configuration follows the [Conventional Commits](https://www.conventionalcommits.org/) standard for calculating the next version.
 
+# Major update: Version 2.0.0
+The upcoming 2.0.0 release has these main changes:
+- Follows SemVer 2.0.0 https://semver.org/spec/v2.0.0.html
+- It has been rewritten into Kotlin. This allows for more exact checks on nullability and improves code quality.
+- This new version needs JVM 17 or newer to run.
+
 # Requirements
 This version policy requires version 3.0.0 or newer of the [maven-release-plugin](https://maven.apache.org/maven-release/maven-release-plugin/) to be used.
 
@@ -81,7 +87,7 @@ the rules from the [Conventional Commits v1.0.0](https://www.conventionalcommits
 ## Using a custom release tag format
 If you want a different tag format this will usually result in setting it both when creating the tag and
 for finding it again.
-Here the rules from the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) are also followed.
+Here the rules from the [Conventional Commits v2.0.0](https://www.conventionalcommits.org/en/v1.0.0/) are also followed.
 
 ```xml
 <plugin>

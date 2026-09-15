@@ -16,41 +16,38 @@
  */
 package nl.basjes.maven.release.version.conventionalcommits;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ConventionalCommitsVersionConfigTest {
 
-    String versionRulesConfig = ""
-        + "<projectVersionPolicyConfig>"
-        + "  <minorRules>"
-        + "    <minorRule>Minor One</minorRule>"
-        + "    <minorRule>Minor Two</minorRule>"
-        + "    <minorRule>Minor Three</minorRule>"
-        + "  </minorRules>"
-        + "  <majorRules>"
-        + "    <majorRule>Major One</majorRule>"
-        + "    <majorRule>Major Two</majorRule>"
-        + "    <majorRule>Major Three</majorRule>"
-        + "  </majorRules>"
-        + "  <versionTag>My Version Tag</versionTag>"
-        + "</projectVersionPolicyConfig>";
+    String versionRulesConfig =
+        """
+            <projectVersionPolicyConfig>
+              <minorRules>
+                <minorRule>Minor One</minorRule>
+                <minorRule>Minor Two</minorRule>
+                <minorRule>Minor Three</minorRule>
+              </minorRules>
+              <majorRules>
+                <majorRule>Major One</majorRule>
+                <majorRule>Major Two</majorRule>
+                <majorRule>Major Three</majorRule>
+              </majorRules>
+              <versionTag>My Version Tag</versionTag>
+            </projectVersionPolicyConfig>
+            """.stripIndent();
 
     @Test
-    void readXMLTest() {
+    void createAndSerdeLoopTest() {
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
-        assertEquals("My Version Tag", config.getVersionTag());
-        assertEquals(Arrays.asList("Minor One", "Minor Two", "Minor Three"), config.getMinorRules());
-        assertEquals(Arrays.asList("Major One", "Major Two", "Major Three"), config.getMajorRules());
-    }
+        assertNotNull(config);
 
-    @Test
-    void createAndSerdeLoopTest() throws JsonProcessingException {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         ConventionalCommitsVersionConfig config1 = new ConventionalCommitsVersionConfig();
 
         config1.setVersionTag("My Version Tag")
@@ -66,7 +63,106 @@ class ConventionalCommitsVersionConfigTest {
         String configXml = config1.toXml();
 
         ConventionalCommitsVersionConfig config2 = ConventionalCommitsVersionConfig.fromXml(configXml);
+        assertNotNull(config2);
 
         assertEquals(config1.toString(), config2.toString());
+    }
+
+    @Test
+    void readXMLTestVersionMajorMinor() {
+        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+            """
+            <projectVersionPolicyConfig>
+              <minorRules>
+                <minorRule>Minor One</minorRule>
+                <minorRule>Minor Two</minorRule>
+                <minorRule>Minor Three</minorRule>
+              </minorRules>
+              <majorRules>
+                <majorRule>Major One</majorRule>
+                <majorRule>Major Two</majorRule>
+                <majorRule>Major Three</majorRule>
+              </majorRules>
+              <versionTag>My Version Tag</versionTag>
+            </projectVersionPolicyConfig>
+            """
+        );
+        assertNotNull(config);
+        assertEquals("My Version Tag", config.getVersionTag());
+        assertEquals(List.of("Minor One", "Minor Two", "Minor Three"), config.getMinorRules());
+        assertEquals(List.of("Major One", "Major Two", "Major Three"), config.getMajorRules());
+    }
+
+    @Test
+    void readXMLTestVersionMajorEmptyMinorEmpty() {
+        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+            """
+            <projectVersionPolicyConfig>
+              <minorRules>
+              </minorRules>
+              <majorRules>
+              </majorRules>
+              <versionTag>My Version Tag</versionTag>
+            </projectVersionPolicyConfig>
+            """
+        );
+        assertNotNull(config);
+        assertEquals("My Version Tag", config.getVersionTag());
+        assertEquals(List.of(), config.getMinorRules());
+        assertEquals(List.of(), config.getMajorRules());
+    }
+
+    @Test
+    void readXMLTestVersion() {
+        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+            """
+            <projectVersionPolicyConfig>
+              <versionTag>My Version Tag</versionTag>
+            </projectVersionPolicyConfig>
+            """
+        );
+        assertNotNull(config);
+        assertEquals("My Version Tag", config.getVersionTag());
+        assertEquals(List.of(), config.getMinorRules());
+        assertEquals(List.of(), config.getMajorRules());
+    }
+
+
+    @Test
+    void readXMLTestMinor() {
+        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+            """
+            <projectVersionPolicyConfig>
+              <minorRules>
+                <minorRule>Minor One</minorRule>
+                <minorRule>Minor Two</minorRule>
+                <minorRule>Minor Three</minorRule>
+              </minorRules>
+            </projectVersionPolicyConfig>
+            """
+        );
+        assertNotNull(config);
+        assertNull(config.getVersionTag());
+        assertEquals(List.of("Minor One", "Minor Two", "Minor Three"), config.getMinorRules());
+        assertEquals(List.of(), config.getMajorRules());
+    }
+
+    @Test
+    void readXMLTestMajor() {
+        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+            """
+            <projectVersionPolicyConfig>
+              <majorRules>
+                <majorRule>Major One</majorRule>
+                <majorRule>Major Two</majorRule>
+                <majorRule>Major Three</majorRule>
+              </majorRules>
+            </projectVersionPolicyConfig>
+            """
+        );
+        assertNotNull(config);
+        assertNull(config.getVersionTag());
+        assertEquals(List.of(), config.getMinorRules());
+        assertEquals(List.of("Major One", "Major Two", "Major Three"), config.getMajorRules());
     }
 }

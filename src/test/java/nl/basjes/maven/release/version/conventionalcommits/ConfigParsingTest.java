@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -118,13 +119,14 @@ class ConfigParsingTest {
 
     @Test
     void testParseEmptyValid() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertNull(config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
@@ -139,14 +141,15 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidTag() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customVersionTagXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """+customVersionTagXML+"""
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
@@ -160,15 +163,16 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidTagMinor() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customVersionTagXML
-            + customMinorRulesXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """ + customVersionTagXML + """
+            """ + customMinorRulesXML + """
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
@@ -183,15 +187,17 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidTagMajor() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customVersionTagXML
-            + customMajorRulesXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """ + customVersionTagXML + """
+            """ + customMajorRulesXML + """
+            </projectVersionPolicyConfig>
+            """;
+
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
@@ -206,16 +212,17 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidTagMinorMajor() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customVersionTagXML
-            + customMajorRulesXML
-            + customMinorRulesXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """ + customVersionTagXML + """
+            """ + customMajorRulesXML + """
+            """ + customMinorRulesXML + """
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertEquals(customVersionTagRegex, config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
@@ -231,14 +238,15 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidMinor() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customMinorRulesXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """ + customMinorRulesXML + """
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertNull(config.getVersionTag());
         assertEquals(0, config.getMajorRules().size());
@@ -253,14 +261,15 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidMajor() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customMajorRulesXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """ + customMajorRulesXML + """
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertNull(config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());
@@ -275,15 +284,16 @@ class ConfigParsingTest {
 
     @Test
     void testParseValidMinorMajor() {
-        String versionRulesConfig = ""
-            + "<projectVersionPolicyConfig>"
-            + customMajorRulesXML
-            + customMinorRulesXML
-            + "</projectVersionPolicyConfig>" +
-            "";
+        String versionRulesConfig = """
+            <projectVersionPolicyConfig>
+            """ + customMajorRulesXML + """
+            """ + customMinorRulesXML + """
+            </projectVersionPolicyConfig>
+            """;
 
         ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
         LOG.info("Tested config: {}", config);
+        assertNotNull(config);
 
         assertNull(config.getVersionTag());
         assertEquals(1, config.getMajorRules().size());

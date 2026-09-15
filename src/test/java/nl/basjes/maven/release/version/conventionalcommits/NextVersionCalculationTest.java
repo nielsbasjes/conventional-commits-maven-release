@@ -30,11 +30,11 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
+import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.MAJOR;
+import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.MINOR;
+import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.PATCH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.semver.Version.Element.MAJOR;
-import static org.semver.Version.Element.MINOR;
-import static org.semver.Version.Element.PATCH;
 
 public class NextVersionCalculationTest extends AbstractNextVersionTest {
 
@@ -118,9 +118,10 @@ public class NextVersionCalculationTest extends AbstractNextVersionTest {
             verifyNextVersion("1.2.3",
                 Collections.singletonList("Nothing"),
                 singletonList("Bad"),
-                "<projectVersionPolicyConfig>\n" +
-                "  <versionTag>^(Bad)$</versionTag>\n" +
-                "</projectVersionPolicyConfig>",
+                """
+                    <projectVersionPolicyConfig>
+                      <versionTag>^(Bad)$</versionTag>
+                    </projectVersionPolicyConfig>""",
                 "Should fail",
                 null)
         );

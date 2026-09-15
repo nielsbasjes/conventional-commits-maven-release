@@ -43,7 +43,7 @@
               <goal>select-jdk-toolchain</goal>
             </goals>
             <configuration>
-              <version>[1.8,1.9)</version>
+              <version>[17,18)</version>
             </configuration>
           </execution>
         </executions>

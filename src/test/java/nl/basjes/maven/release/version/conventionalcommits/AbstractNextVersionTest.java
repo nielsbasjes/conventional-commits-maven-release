@@ -23,7 +23,6 @@ import org.apache.maven.shared.release.policy.PolicyException;
 import org.apache.maven.shared.release.policy.version.VersionPolicy;
 import org.apache.maven.shared.release.policy.version.VersionPolicyRequest;
 import org.apache.maven.shared.release.versions.VersionParseException;
-import org.semver.Version;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,8 +38,8 @@ public abstract class AbstractNextVersionTest {
 
     public static final VersionRules DEFAULT_VERSION_RULES = new VersionRules(null);
 
-    public void assertNextVersion(VersionRules versionRules, String input, Version.Element element) {
-        switch (element) {
+    public void assertNextVersion(VersionRules versionRules, String input, VersionStep step) {
+        switch (step) {
             case MAJOR:
                 assertTrue(versionRules.isMajorUpdate(input));
                 // We do not care about minor and patch
@@ -55,7 +54,7 @@ public abstract class AbstractNextVersionTest {
                 assertFalse(versionRules.isMinorUpdate(input));
                 break;
             default:
-                fail("Unsupported element type:" + element);
+                fail("Unsupported version step type:" + step);
         }
     }
 

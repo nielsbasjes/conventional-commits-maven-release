@@ -17,10 +17,9 @@
 package nl.basjes.maven.release.version.conventionalcommits;
 
 import org.junit.jupiter.api.Test;
-
-import static org.semver.Version.Element.MAJOR;
-import static org.semver.Version.Element.MINOR;
-import static org.semver.Version.Element.PATCH;
+import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.MAJOR;
+import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.MINOR;
+import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.PATCH;
 
 class NextVersionSpecificationTest extends AbstractNextVersionTest {
 
