@@ -22,4 +22,4 @@ for lower severity vulnerabilities or hardening in the following `major.minor.pa
 
 ## Automatic updates
 
-We strongly recommend using tool like [Renovate](https://renovatebot.com) or [Dependabot](https://github.com/dependabot) to get the latest versions of all your dependencies automatically as a pull request in Github or Gitlab.
+We strongly recommend using tool like [Renovate](https://renovatebot.com) or [Dependabot](https://github.com/dependabot) to get the latest versions of all your dependencies automatically as a pull request in GitHub or Gitlab.

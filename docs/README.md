@@ -47,10 +47,10 @@ Notation used:
 The steps:
 1. By default, it assumes that only a patch release (i.e. `?.?.+1` ) is needed.
 
-1. If any of the commit messages since the previous release tag match any of the of `minorRules` regexes then
+2. If any of the commit messages since the previous release tag match any of the of `minorRules` regexes then
   it assumes the next release is a minor release (i.e. `?.+1.0` ).
 
-1. If any of the commit messages since the previous release tag match any of the of `majorRules` regexes then
+3. If any of the commit messages since the previous release tag match any of the of `majorRules` regexes then
   it assumes the next release is a major release (i.e. `+1.0.0` ).
 
 ## Next development version:
@@ -117,7 +117,7 @@ Here the rules from the [Conventional Commits v2.0.0](https://www.conventionalco
 
 ## Using custom commit message patterns
 If either the minor or major rules are specified then **all default** rules (both minor and major) **are dropped**
-in favour of the configuration.
+in favor of the configuration.
 
 ```xml
 <plugin>
