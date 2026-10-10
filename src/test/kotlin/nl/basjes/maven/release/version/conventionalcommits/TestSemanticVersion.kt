@@ -21,6 +21,7 @@ import io.kotest.matchers.shouldBe
 import org.slf4j.LoggerFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
@@ -216,7 +217,7 @@ class TestSemanticVersion {
         }
 
         assertNotEquals(semanticVersions, shuffledVersions)
-
+        assertEquals(expected, shuffledVersions.sorted().map { it.toString() }.toList())
     }
 
     @Test
@@ -251,4 +252,75 @@ class TestSemanticVersion {
             assertEquals(input, semanticVersion.toString())
         }
     }
+
+    @Test
+    fun verifySemVer2AllOrdering() {
+        val expected = listOf(
+            "1.0.0-alpha",
+            "1.0.0-alpha.1",
+            "1.0.0-alpha.beta",
+            "1.0.0",
+            "1.1.0-alpha",
+            "1.1.0-alpha.1",
+            "1.1.0-alpha.beta",
+            "1.1.0",
+            "1.1.1-alpha",
+            "1.1.1-alpha.1",
+            "1.1.1-alpha.beta",
+            "1.1.1",
+            "2.0.0-alpha",
+            "2.0.0-alpha.1",
+            "2.0.0-alpha.beta",
+            "2.0.0",
+            "2.1.0-alpha",
+            "2.1.0-alpha.1",
+            "2.1.0-alpha.beta",
+            "2.1.0",
+            "2.1.1-alpha",
+            "2.1.1-alpha.1",
+            "2.1.1-alpha.beta",
+            "2.1.1",
+        )
+        val semanticVersions = expected.map { version -> version.toVersion() }.toList()
+
+        val shuffledVersions = mutableListOf<SemanticVersion>()
+        shuffledVersions.addAll(semanticVersions)
+        while (semanticVersions == shuffledVersions) {
+            shuffledVersions.clear()
+            semanticVersions.shuffled().forEach { shuffledVersions.add(it) }
+        }
+        assertNotEquals(semanticVersions, shuffledVersions)
+
+        // Now sort them and we should have the original list again
+        assertEquals(expected, shuffledVersions.sorted().map { it.toString() }.toList())
+    }
+
+
+    @Test
+    fun verifySemVer2Equals() {
+        val expected = listOf(
+            "1.0.0-alpha.beta",
+            "1.0.0-alpha",
+            "1.0.0",
+        )
+        val semanticVersions = expected.map { version -> version.toVersion() }.toList()
+
+        assertFalse(semanticVersions.first().equals("A String is not a version instance."))
+        assertNotEquals(semanticVersions.first().hashCode(), semanticVersions.last().hashCode())
+
+        semanticVersions.forEach { version ->
+            assertTrue(version.equals(version))
+        }
+
+        val semanticVersionsPairs = semanticVersions.flatMap { left ->
+            semanticVersions
+                .filter { left != it }
+                .map { right -> left to right }
+        }
+
+        semanticVersionsPairs.forEach { pair ->
+            assertNotEquals(pair.first, pair.second, "Should be different: ${pair.first} -> ${pair.second}")
+        }
+    }
+
 }
