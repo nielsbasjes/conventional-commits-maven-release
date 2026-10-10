@@ -33,13 +33,13 @@ class CommitHistory(request: VersionPolicyRequest, versionRules: VersionRules) {
     var lastVersionTag: String? = null
         private set
 
-    fun addChanges(change: ChangeSet?) {
-        this.changes.add(change!!)
+    fun addChanges(change: ChangeSet) {
+        this.changes.add(change)
     }
 
     private fun load(request: VersionPolicyRequest, versionRules: VersionRules) {
-        val scmRepository = request.scmRepository
-        val scmProvider = request.scmProvider
+        val scmRepository    = request.scmRepository
+        val scmProvider      = request.scmProvider
         val workingDirectory = request.workingDirectory
 
         if (scmRepository == null || scmProvider == null || workingDirectory == null) {
@@ -69,12 +69,12 @@ class CommitHistory(request: VersionPolicyRequest, versionRules: VersionRules) {
             for (changeSet in changeSets) {
                 addChanges(changeSet)
 
-                val changeSetTags = changeSet.getTags()
+                val changeSetTags = changeSet.tags
                 val versionTags = changeSetTags
                     .map { tag: String ->
-                        val matcher = versionRules.tagPattern.matcher(tag)
-                        if (matcher.find()) {
-                            return@map matcher.group(1)
+                        val result = versionRules.extractVersionString(tag)
+                        if (result != null) {
+                            return@map result
                         }
                         null
                     }

@@ -54,15 +54,19 @@ class SemanticVersion internal constructor(
             val preReleasePart2 = preReleaseParts2[i]
 
             if (preReleasePart1 != preReleasePart2) {
-                val p1Int = preReleasePart1.toIntOrNull()
-                val p2Int = preReleasePart2.toIntOrNull()
+                val preReleasePart1Int = preReleasePart1.toIntOrNull()
+                val preReleasePart2Int = preReleasePart2.toIntOrNull()
 
                 return when {
                     // Numeric identifiers always have lower precedence than non-numeric identifiers
-                    p1Int != null && p2Int != null -> p1Int.compareTo(p2Int)
-                    p1Int != null -> -1
-                    p2Int != null -> 1
-                    else -> preReleasePart1.compareTo(preReleasePart2) // Identifiers with letters or hyphens are compared lexically
+                    preReleasePart1Int != null && preReleasePart2Int != null
+                        -> preReleasePart1Int.compareTo(preReleasePart2Int)
+                    preReleasePart1Int != null
+                        -> -1
+                    preReleasePart2Int != null
+                        -> 1
+                    else
+                        -> preReleasePart1.compareTo(preReleasePart2) // Identifiers with letters or hyphens are compared lexically
                 }
             }
         }
@@ -129,10 +133,10 @@ fun SemanticVersion.next(step: VersionStep) =
         VersionStep.PATCH -> this.nextPatch()
     }
 
-fun SemanticVersion.nextMajor() = SemanticVersion(major+1, 0,       0)
-fun SemanticVersion.nextMinor() = SemanticVersion(major,   minor+1, 0)
-fun SemanticVersion.nextPatch() = SemanticVersion(major,   minor,   patch+1)
+fun SemanticVersion.nextMajor()        = SemanticVersion(major+1, 0,       0)
+fun SemanticVersion.nextMinor()        = SemanticVersion(major,   minor+1, 0)
+fun SemanticVersion.nextPatch()        = SemanticVersion(major,   minor,   patch+1)
 
-fun SemanticVersion.toReleaseVersion() = SemanticVersion(major, minor, patch)
-fun SemanticVersion.toSnapshot() = SemanticVersion(major,   minor,   patch, "SNAPSHOT")
+fun SemanticVersion.toReleaseVersion() = SemanticVersion(major,   minor,   patch)
+fun SemanticVersion.toSnapshot()       = SemanticVersion(major,   minor,   patch, "SNAPSHOT")
 

@@ -58,16 +58,19 @@ class ConventionalCommitsVersionConfig {
     var majorRules: MutableList<String> = mutableListOf()
         private set
 
+    // Used for testing only
     fun setVersionTag(newVersionTag: String?): ConventionalCommitsVersionConfig {
         this.versionTag = newVersionTag
         return this
     }
 
+    // Used for testing only
     fun addMinorRule(newRule: String): ConventionalCommitsVersionConfig {
         minorRules.add(newRule)
         return this
     }
 
+    // Used for testing only
     fun addMajorRule(newRule: String): ConventionalCommitsVersionConfig {
         majorRules.add(newRule)
         return this
@@ -89,8 +92,10 @@ class ConventionalCommitsVersionConfig {
         }
 
         @JvmStatic
-        fun fromXml(configXml: String?): ConventionalCommitsVersionConfig? {
-            if (configXml.isNullOrBlank()) return null
+        fun fromXml(configXml: String?): ConventionalCommitsVersionConfig {
+            if (configXml.isNullOrBlank()) {
+                return ConventionalCommitsVersionConfig() // No changes from the default
+            }
             // NOTE: If the provided config still contains the property that should have been
             // interpolated there is no option to retrieve it. So we simply assume it is an empty string.
             val sanitizedXml = configXml.replace($$"${projectVersionPolicyConfig}", "")

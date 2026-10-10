@@ -35,16 +35,13 @@ import javax.inject.Singleton
  */
 @Singleton
 @Named("ConventionalCommitsVersionPolicy")
-@Description(
-    ("A VersionPolicy following the SemVer rules and looks at "
-            + "the commit messages following the Conventional Commits convention.")
-)
+@Description("A VersionPolicy following the SemVer rules and looks at the commit messages following the Conventional Commits convention.")
 class ConventionalCommitsVersionPolicy : VersionPolicy {
     @Throws(VersionParseException::class, PolicyException::class)
     override fun getReleaseVersion(request: VersionPolicyRequest): VersionPolicyResult {
-        val versionConfig = if (request.config.isNullOrBlank()) null else fromXml(request.config)
+        val versionConfig = fromXml(request.config)
         val versionRules = VersionRules(versionConfig)
-        val commitHistory: CommitHistory?
+        val commitHistory: CommitHistory
         try {
             commitHistory = CommitHistory(request, versionRules)
         } catch (e: ScmException) {
@@ -54,7 +51,7 @@ class ConventionalCommitsVersionPolicy : VersionPolicy {
         var usingTag = false
 
         var versionString = request.version // The current version in the pom
-        var version: SemanticVersion?
+        var version: SemanticVersion
 
         LOG.debug("--------------------------------------------------------")
         LOG.debug("Determining next ReleaseVersion")
@@ -115,13 +112,13 @@ class ConventionalCommitsVersionPolicy : VersionPolicy {
         LOG.info("- Next release version : {}", releaseVersion)
 
         val result = VersionPolicyResult()
-        result.setVersion(releaseVersion.toString())
+        result.version = releaseVersion.toString()
         return result
     }
 
     @Throws(VersionParseException::class)
     override fun getDevelopmentVersion(request: VersionPolicyRequest): VersionPolicyResult {
-        var version: SemanticVersion?
+        var version: SemanticVersion
         try {
             version = request.version.toVersion()
         } catch (e: IllegalArgumentException) {
@@ -130,7 +127,7 @@ class ConventionalCommitsVersionPolicy : VersionPolicy {
 
         version = version.nextPatch()
         val result = VersionPolicyResult()
-        result.setVersion(version.toSnapshot().toString())
+        result.version = version.toSnapshot().toString()
         return result
     }
 
