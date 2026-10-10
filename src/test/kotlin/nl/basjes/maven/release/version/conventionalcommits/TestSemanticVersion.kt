@@ -253,6 +253,73 @@ class TestSemanticVersion {
         }
     }
 
+    fun assertVersionIsBeforeVersion(before: SemanticVersion, after: SemanticVersion) {
+        assertEquals(-1, before.compareTo(after), "Comparing $before to $after")
+        assertEquals( 1, after.compareTo(before), "Comparing $before to $after")
+        assertNotEquals(before.hashCode(), after.hashCode(), "Comparing hash codes of $after to $after")
+    }
+
+    @Test
+    fun verifyCompareTo() {
+        assertVersionIsBeforeVersion("0.0.0".toVersion(),       "0.0.1".toVersion())
+        assertVersionIsBeforeVersion("0.0.0".toVersion(),       "0.1.0".toVersion())
+        assertVersionIsBeforeVersion("0.0.0".toVersion(),       "1.0.0".toVersion())
+        assertVersionIsBeforeVersion("1.0.0".toVersion(),       "1.0.1".toVersion())
+        assertVersionIsBeforeVersion("1.0.0".toVersion(),       "1.1.0".toVersion())
+        assertVersionIsBeforeVersion("1.0.0".toVersion(),       "2.0.0".toVersion())
+        assertVersionIsBeforeVersion("1.0.0-alpha".toVersion(), "1.0.0".toVersion())
+        assertVersionIsBeforeVersion("1.0.0-alpha".toVersion(), "1.0.0+build".toVersion())
+        assertVersionIsBeforeVersion("1.0.0-alpha".toVersion(), "1.0.0-beta".toVersion())
+        assertVersionIsBeforeVersion("1.0.0-alpha".toVersion(), "1.0.0-beta+build".toVersion())
+    }
+
+    @Test
+    fun verifyEquals() {
+        // Same instance compare
+        "0.0.0".toVersion().apply { assertTrue(this.equals(this), "$this") }
+
+        assertFalse("0.0.0".toVersion()             .equals(null))
+        assertFalse("0.0.0".toVersion()             .equals("No a version instance"))
+        assertFalse("0.0.0".toVersion()             .equals("0.0.1".toVersion()             ))
+        assertFalse("0.0.0".toVersion()             .equals("0.1.0".toVersion()             ))
+        assertFalse("0.0.0".toVersion()             .equals("1.0.0".toVersion()             ))
+        assertFalse("1.0.0-alpha".toVersion()       .equals("1.0.0".toVersion()             ))
+        assertFalse("1.0.0-alpha".toVersion()       .equals("1.0.0+build".toVersion()       ))
+        assertFalse("1.0.0-alpha".toVersion()       .equals("1.0.0-alpha+build".toVersion() ))
+        assertFalse("1.0.0-alpha".toVersion()       .equals("1.0.0-beta".toVersion()        ))
+
+        assertFalse("0.0.1".toVersion()             .equals("0.0.0".toVersion()             ))
+        assertFalse("0.1.0".toVersion()             .equals("0.0.0".toVersion()             ))
+        assertFalse("1.0.0".toVersion()             .equals("0.0.0".toVersion()             ))
+        assertFalse("1.0.0".toVersion()             .equals("1.0.0-alpha".toVersion()       ))
+        assertFalse("1.0.0+build".toVersion()       .equals("1.0.0-alpha".toVersion()       ))
+        assertFalse("1.0.0-alpha+build".toVersion() .equals("1.0.0-alpha".toVersion()       ))
+        assertFalse("1.0.0-beta".toVersion()        .equals("1.0.0-alpha".toVersion()       ))
+
+        assertTrue("1.2.3".toVersion()              .equals("1.2.3".toVersion()             ))
+        assertTrue("1.2.3-alpha".toVersion()        .equals("1.2.3-alpha".toVersion()       ))
+        assertTrue("1.2.3-alpha+build".toVersion()  .equals("1.2.3-alpha+build".toVersion() ))
+
+        assertTrue("1".toVersion()                  .equals("1.0.0".toVersion()             ))
+        assertTrue("1-alpha".toVersion()            .equals("1.0.0-alpha".toVersion()       ))
+        assertTrue("1+build".toVersion()            .equals("1.0.0+build".toVersion()       ))
+        assertTrue("1-alpha+build".toVersion()      .equals("1.0.0-alpha+build".toVersion() ))
+
+    }
+
+    fun assertSameOrdering(first: String, second:String) {
+        assertEquals(0, first.toVersion().compareTo(second.toVersion()))
+    }
+
+    @Test
+    fun verifyOrderingEquality() {
+        assertSameOrdering("0.0.0",            "0.0.0+build")
+        assertSameOrdering("1.0.0",            "1.0.0+build")
+        assertSameOrdering("1.0.0-alpha",      "1.0.0-alpha+build")
+        assertSameOrdering("1.0.0-alpha.1",    "1.0.0-alpha.1+build")
+        assertSameOrdering("1.0.0-alpha.beta", "1.0.0-alpha.beta+build")
+    }
+
     @Test
     fun verifySemVer2AllOrdering() {
         val expected = listOf(
@@ -293,34 +360,6 @@ class TestSemanticVersion {
 
         // Now sort them and we should have the original list again
         assertEquals(expected, shuffledVersions.sorted().map { it.toString() }.toList())
-    }
-
-
-    @Test
-    fun verifySemVer2Equals() {
-        val expected = listOf(
-            "1.0.0-alpha.beta",
-            "1.0.0-alpha",
-            "1.0.0",
-        )
-        val semanticVersions = expected.map { version -> version.toVersion() }.toList()
-
-        assertFalse(semanticVersions.first().equals("A String is not a version instance."))
-        assertNotEquals(semanticVersions.first().hashCode(), semanticVersions.last().hashCode())
-
-        semanticVersions.forEach { version ->
-            assertTrue(version.equals(version))
-        }
-
-        val semanticVersionsPairs = semanticVersions.flatMap { left ->
-            semanticVersions
-                .filter { left != it }
-                .map { right -> left to right }
-        }
-
-        semanticVersionsPairs.forEach { pair ->
-            assertNotEquals(pair.first, pair.second, "Should be different: ${pair.first} -> ${pair.second}")
-        }
     }
 
 }

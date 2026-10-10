@@ -118,7 +118,7 @@ fun String.toVersion(): SemanticVersion {
         ?: throw SemanticVersionParseException("Invalid SemanticVersion format: '$this'")
     val (major, minor, patch, preRelease, buildMetadata) = matchResult.destructured
     return SemanticVersion(
-        major         = major         .takeIf { it.isNotBlank() }?.toInt() ?: 0 ,
+        major         = major         .toInt(), // Cannot be blank here
         minor         = minor         .takeIf { it.isNotBlank() }?.toInt() ?: 0 ,
         patch         = patch         .takeIf { it.isNotBlank() }?.toInt() ?: 0 ,
         preRelease    = preRelease    .takeIf { it.isNotBlank() },
@@ -139,4 +139,3 @@ fun SemanticVersion.nextPatch()        = SemanticVersion(major,   minor,   patch
 
 fun SemanticVersion.toReleaseVersion() = SemanticVersion(major,   minor,   patch)
 fun SemanticVersion.toSnapshot()       = SemanticVersion(major,   minor,   patch, "SNAPSHOT")
-
