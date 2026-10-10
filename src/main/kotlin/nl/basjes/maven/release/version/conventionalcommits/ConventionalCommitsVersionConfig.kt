@@ -25,57 +25,37 @@ import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import org.slf4j.LoggerFactory
 
+private val XML_MAPPER = XML.v1 {
+    policy {
+        verifyElementOrder = false
+    }
+}
+
 @Serializable
 @XmlSerialName("projectVersionPolicyConfig", namespace = "", prefix = "")
-class ConventionalCommitsVersionConfig {
-    // Only need for tests
-    fun toXml(): String {
-        return XML_MAPPER.encodeToString(this)
-    }
-
+data class ConventionalCommitsVersionConfig(
     /**
      * The regex with exactly 1 capture group that extracts the version from the SCM tag.
      * Or null if no version tag was defined.
      */
     @XmlElement
     @XmlSerialName("versionTag", namespace = "", prefix = "")
-    var versionTag: String? = null
-        private set
+    val versionTag: String? = null,
 
     /*
     * The list of regexes that must be classified as "minor" version changes.
     */
     @XmlSerialName("minorRules", namespace = "", prefix = "")
     @XmlChildrenName("minorRule", namespace = "", prefix = "")
-    var minorRules: MutableList<String> = mutableListOf()
-        private set
+    val minorRules: List<String> = listOf(),
 
     /*
     * The list of regexes that must be classified as "major" version changes.
     */
     @XmlSerialName("majorRules", namespace = "", prefix = "")
     @XmlChildrenName("majorRule", namespace = "", prefix = "")
-    var majorRules: MutableList<String> = mutableListOf()
-        private set
-
-    // Used for testing only
-    fun setVersionTag(newVersionTag: String?): ConventionalCommitsVersionConfig {
-        this.versionTag = newVersionTag
-        return this
-    }
-
-    // Used for testing only
-    fun addMinorRule(newRule: String): ConventionalCommitsVersionConfig {
-        minorRules.add(newRule)
-        return this
-    }
-
-    // Used for testing only
-    fun addMajorRule(newRule: String): ConventionalCommitsVersionConfig {
-        majorRules.add(newRule)
-        return this
-    }
-
+    val majorRules: List<String> = listOf(),
+) {
     override fun toString(): String {
         return "ConventionalCommitsVersionConfig {" +
                 "versionTag='" + versionTag + '\'' +
@@ -84,13 +64,12 @@ class ConventionalCommitsVersionConfig {
                 '}'
     }
 
-    companion object {
-        private val XML_MAPPER = XML.v1 {
-            policy {
-                verifyElementOrder = false
-            }
-        }
+    // Only need for tests
+    fun toXml(): String {
+        return XML_MAPPER.encodeToString(this)
+    }
 
+    companion object {
         @JvmStatic
         fun fromXml(configXml: String?): ConventionalCommitsVersionConfig {
             if (configXml.isNullOrBlank()) {
@@ -111,5 +90,7 @@ class ConventionalCommitsVersionConfig {
             }
         }
     }
-
 }
+
+
+

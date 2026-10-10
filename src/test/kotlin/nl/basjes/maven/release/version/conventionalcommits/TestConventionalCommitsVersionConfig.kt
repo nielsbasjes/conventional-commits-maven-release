@@ -44,16 +44,11 @@ internal class TestConventionalCommitsVersionConfig {
         val config = fromXml(versionRulesConfig)
         assertNotNull(config)
 
-        val config1 = ConventionalCommitsVersionConfig()
-
-        config1
-            .setVersionTag("My Version Tag")
-            .addMinorRule("Minor One")
-            .addMinorRule("Minor Two")
-            .addMinorRule("Minor Three")
-            .addMajorRule("Major One")
-            .addMajorRule("Major Two")
-            .addMajorRule("Major Three")
+        val config1 = ConventionalCommitsVersionConfig(
+            versionTag = "My Version Tag",
+            minorRules = listOf("Minor One", "Minor Two", "Minor Three"),
+            majorRules = listOf("Major One", "Major Two", "Major Three"),
+        )
 
         assertEquals(config.toString(), config1.toString())
 

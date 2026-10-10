@@ -318,8 +318,7 @@ internal class TestConfigParsing {
 
     @Test
     fun testVersionRulesIgnoreNullTag() {
-        val config = ConventionalCommitsVersionConfig()
-        config.setVersionTag(null)
+        val config = ConventionalCommitsVersionConfig(versionTag = null)
         val versionRules = VersionRules(config)
         assertEquals(
             defaultVersionRules.tagPattern.toString(),
@@ -329,8 +328,7 @@ internal class TestConfigParsing {
 
     @Test
     fun testVersionRulesIgnoreBlankTag() {
-        val config = ConventionalCommitsVersionConfig()
-        config.setVersionTag("       ")
+        val config = ConventionalCommitsVersionConfig(versionTag = "       ")
         val versionRules = VersionRules(config)
         assertEquals(
             defaultVersionRules.tagPattern.toString(),

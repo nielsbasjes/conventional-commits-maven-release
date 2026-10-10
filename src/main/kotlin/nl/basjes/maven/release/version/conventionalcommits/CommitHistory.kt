@@ -85,8 +85,7 @@ class CommitHistory(request: VersionPolicyRequest, versionRules: VersionRules) {
                     // Found the previous release tag
                     if (versionTags.size > 1) {
                         throw VersionParseException(
-                            "Most recent commit with tags has multiple version tags: "
-                                    + versionTags
+                            "Most recent commit with tags has multiple version tags: $versionTags"
                         )
                     }
                     this.lastVersionTag = versionTags.first()
