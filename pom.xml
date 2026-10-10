@@ -688,7 +688,7 @@
 
           <preparationProfiles>packageForRelease</preparationProfiles>
           <preparationGoals>clean verify</preparationGoals>
-          <releaseProfiles>packageForRelease,release,deployToSonatype</releaseProfiles>
+          <releaseProfiles>packageForRelease</releaseProfiles>
           <pushChanges>false</pushChanges>
           <remoteTagging>false</remoteTagging>
 
