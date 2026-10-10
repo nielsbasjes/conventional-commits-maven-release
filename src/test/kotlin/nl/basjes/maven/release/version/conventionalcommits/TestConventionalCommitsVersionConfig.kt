@@ -14,20 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.basjes.maven.release.version.conventionalcommits;
+package nl.basjes.maven.release.version.conventionalcommits
 
-import org.junit.jupiter.api.Test;
+import nl.basjes.maven.release.version.conventionalcommits.ConventionalCommitsVersionConfig.Companion.fromXml
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-class ConventionalCommitsVersionConfigTest {
-
-    String versionRulesConfig =
-        """
+internal class TestConventionalCommitsVersionConfig {
+    var versionRulesConfig: String = """
             <projectVersionPolicyConfig>
               <minorRules>
                 <minorRule>Minor One</minorRule>
@@ -41,36 +37,37 @@ class ConventionalCommitsVersionConfigTest {
               </majorRules>
               <versionTag>My Version Tag</versionTag>
             </projectVersionPolicyConfig>
-            """.stripIndent();
+            """.trimIndent()
 
     @Test
-    void createAndSerdeLoopTest() {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(versionRulesConfig);
-        assertNotNull(config);
+    fun createAndSerdeLoopTest() {
+        val config = fromXml(versionRulesConfig)
+        assertNotNull(config)
 
-        ConventionalCommitsVersionConfig config1 = new ConventionalCommitsVersionConfig();
+        val config1 = ConventionalCommitsVersionConfig()
 
-        config1.setVersionTag("My Version Tag")
+        config1
+            .setVersionTag("My Version Tag")
             .addMinorRule("Minor One")
             .addMinorRule("Minor Two")
             .addMinorRule("Minor Three")
             .addMajorRule("Major One")
             .addMajorRule("Major Two")
-            .addMajorRule("Major Three");
+            .addMajorRule("Major Three")
 
-        assertEquals(config.toString(), config1.toString());
+        assertEquals(config.toString(), config1.toString())
 
-        String configXml = config1.toXml();
+        val configXml = config1.toXml()
 
-        ConventionalCommitsVersionConfig config2 = ConventionalCommitsVersionConfig.fromXml(configXml);
-        assertNotNull(config2);
+        val config2 = fromXml(configXml)
+        assertNotNull(config2)
 
-        assertEquals(config1.toString(), config2.toString());
+        assertEquals(config1.toString(), config2.toString())
     }
 
     @Test
-    void readXMLTestVersionMajorMinor() {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+    fun readXMLTestVersionMajorMinor() {
+        val config = fromXml(
             """
             <projectVersionPolicyConfig>
               <minorRules>
@@ -85,17 +82,18 @@ class ConventionalCommitsVersionConfigTest {
               </majorRules>
               <versionTag>My Version Tag</versionTag>
             </projectVersionPolicyConfig>
-            """
-        );
-        assertNotNull(config);
-        assertEquals("My Version Tag", config.getVersionTag());
-        assertEquals(List.of("Minor One", "Minor Two", "Minor Three"), config.getMinorRules());
-        assertEquals(List.of("Major One", "Major Two", "Major Three"), config.getMajorRules());
+
+            """.trimIndent()
+        )
+        assertNotNull(config)
+        assertEquals("My Version Tag", config.versionTag)
+        assertEquals(mutableListOf("Minor One", "Minor Two", "Minor Three"), config.minorRules)
+        assertEquals(mutableListOf("Major One", "Major Two", "Major Three"), config.majorRules)
     }
 
     @Test
-    void readXMLTestVersionMajorEmptyMinorEmpty() {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+    fun readXMLTestVersionMajorEmptyMinorEmpty() {
+        val config = fromXml(
             """
             <projectVersionPolicyConfig>
               <minorRules>
@@ -104,33 +102,34 @@ class ConventionalCommitsVersionConfigTest {
               </majorRules>
               <versionTag>My Version Tag</versionTag>
             </projectVersionPolicyConfig>
-            """
-        );
-        assertNotNull(config);
-        assertEquals("My Version Tag", config.getVersionTag());
-        assertEquals(List.of(), config.getMinorRules());
-        assertEquals(List.of(), config.getMajorRules());
+
+            """.trimIndent()
+        )
+        assertNotNull(config)
+        assertEquals("My Version Tag", config.versionTag)
+        assertEquals(mutableListOf(), config.minorRules)
+        assertEquals(mutableListOf(), config.majorRules)
     }
 
     @Test
-    void readXMLTestVersion() {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+    fun readXMLTestVersion() {
+        val config = fromXml(
             """
             <projectVersionPolicyConfig>
               <versionTag>My Version Tag</versionTag>
             </projectVersionPolicyConfig>
-            """
-        );
-        assertNotNull(config);
-        assertEquals("My Version Tag", config.getVersionTag());
-        assertEquals(List.of(), config.getMinorRules());
-        assertEquals(List.of(), config.getMajorRules());
+
+            """.trimIndent()
+        )
+        assertNotNull(config)
+        assertEquals("My Version Tag", config.versionTag)
+        assertEquals(mutableListOf(), config.minorRules)
+        assertEquals(mutableListOf(), config.majorRules)
     }
 
-
     @Test
-    void readXMLTestMinor() {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+    fun readXMLTestMinor() {
+        val config = fromXml(
             """
             <projectVersionPolicyConfig>
               <minorRules>
@@ -139,17 +138,18 @@ class ConventionalCommitsVersionConfigTest {
                 <minorRule>Minor Three</minorRule>
               </minorRules>
             </projectVersionPolicyConfig>
-            """
-        );
-        assertNotNull(config);
-        assertNull(config.getVersionTag());
-        assertEquals(List.of("Minor One", "Minor Two", "Minor Three"), config.getMinorRules());
-        assertEquals(List.of(), config.getMajorRules());
+
+            """.trimIndent()
+        )
+        assertNotNull(config)
+        assertNull(config.versionTag)
+        assertEquals(mutableListOf("Minor One", "Minor Two", "Minor Three"), config.minorRules)
+        assertEquals(mutableListOf(), config.majorRules)
     }
 
     @Test
-    void readXMLTestMajor() {
-        ConventionalCommitsVersionConfig config = ConventionalCommitsVersionConfig.fromXml(
+    fun readXMLTestMajor() {
+        val config = fromXml(
             """
             <projectVersionPolicyConfig>
               <majorRules>
@@ -158,11 +158,12 @@ class ConventionalCommitsVersionConfigTest {
                 <majorRule>Major Three</majorRule>
               </majorRules>
             </projectVersionPolicyConfig>
-            """
-        );
-        assertNotNull(config);
-        assertNull(config.getVersionTag());
-        assertEquals(List.of(), config.getMinorRules());
-        assertEquals(List.of("Major One", "Major Two", "Major Three"), config.getMajorRules());
+
+            """.trimIndent()
+        )
+        assertNotNull(config)
+        assertNull(config.versionTag)
+        assertEquals(mutableListOf(), config.minorRules)
+        assertEquals(mutableListOf("Major One", "Major Two", "Major Three"), config.majorRules)
     }
 }

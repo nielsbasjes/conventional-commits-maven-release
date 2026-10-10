@@ -14,75 +14,81 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.basjes.maven.release.version.conventionalcommits;
+package nl.basjes.maven.release.version.conventionalcommits
 
-import org.junit.jupiter.api.Test;
-import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.MAJOR;
-import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.MINOR;
-import static nl.basjes.maven.release.version.conventionalcommits.VersionStep.PATCH;
+import kotlin.test.Test
 
-class NextVersionSpecificationTest extends AbstractNextVersionTest {
-
+internal class TestNextVersionSpecification {
     @Test
-    void testConventionalCommitsExamples() {
+    fun testConventionalCommitsExamples() {
         //Verifying the examples show on https://www.conventionalcommits.org/en/v1.0.0/#examples
-        VersionRules rules = DEFAULT_VERSION_RULES;
+        val rules: VersionRules = DEFAULT_VERSION_RULES
 
         // Commit message with description and breaking change footer
         assertNextVersion(
             rules,
-            "feat: allow provided config object to extend other configs\n" +
-            "\n" +
-            "BREAKING CHANGE: `extends` key in config file is now used for extending other config files\n",
-            MAJOR);
+            """
+            feat: allow provided config object to extend other configs
+            BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+            """.trimIndent(),
+            VersionStep.MAJOR
+        )
 
         // Commit message with `!` to draw attention to breaking change
         assertNextVersion(
             rules,
             "feat!: send an email to the customer when a product is shipped",
-            MAJOR);
+            VersionStep.MAJOR
+        )
 
         // Commit message with scope and `!` to draw attention to breaking change
         assertNextVersion(
             rules,
             "feat(api)!: send an email to the customer when a product is shipped",
-            MAJOR);
+            VersionStep.MAJOR
+        )
 
         // Commit message with both `!` and BREAKING CHANGE footer
         assertNextVersion(
             rules,
-            "chore!: drop support for Node 6\n" +
-            "\n" +
-            "BREAKING CHANGE: use JavaScript features not available in Node 6.\n",
-            MAJOR);
+            """
+            chore!: drop support for Node 6
 
-        // Commit message with no body
+            BREAKING CHANGE: use JavaScript features not available in Node 6.
+            """.trimIndent(),
+            VersionStep.MAJOR
+        )
+
+        // Commit message without a body
         assertNextVersion(
             rules,
             "docs: correct spelling of CHANGELOG",
-            PATCH);
+            VersionStep.PATCH
+        )
 
         // Commit message with scope
         assertNextVersion(
             rules,
             "feat(lang): add Polish language",
-            MINOR);
+            VersionStep.MINOR
+        )
 
         // Commit message with multi-paragraph body and multiple footers
         assertNextVersion(
             rules,
-            "fix: prevent racing of requests\n" +
-            "\n" +
-            "Introduce a request id and a reference to latest request. Dismiss\n" +
-            "incoming responses other than from latest request.\n" +
-            "\n" +
-            "    Remove timeouts which were used to mitigate the racing issue but are\n" +
-            "obsolete now.\n" +
-            "\n" +
-            "Reviewed-by: Z\n" +
-            "Refs: #123\n",
-            PATCH);
+            """
+            fix: prevent racing of requests
+
+            Introduce a request id and a reference to latest request. Dismiss
+            incoming responses other than from latest request.
+
+            Remove timeouts which were used to mitigate the racing issue but are
+            obsolete now.
+
+            Reviewed-by: Z
+            Refs: #123
+            """.trimIndent(),
+            VersionStep.PATCH
+        )
     }
-
-
 }

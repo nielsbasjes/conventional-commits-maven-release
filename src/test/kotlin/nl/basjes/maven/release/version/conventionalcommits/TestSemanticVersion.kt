@@ -180,7 +180,6 @@ class TestSemanticVersion {
         assertValid(SemanticVersion(major = 1, minor = 2, patch = 3, preRelease = "SNAPSHOT"))
         assertValid(SemanticVersion(major = 1, minor = 2, patch = 3))
         assertValid(SemanticVersion(major = 1, minor = 2, patch = 3, preRelease = "RC1"))
-
     }
 
     @Test
@@ -191,7 +190,6 @@ class TestSemanticVersion {
             SemanticVersion(major = 1, minor = 2, patch = 3, preRelease = "RC1"),
         )
     }
-
 
     @Test
     fun verifySemVer2OrderingExample() {
@@ -253,9 +251,4 @@ class TestSemanticVersion {
             assertEquals(input, semanticVersion.toString())
         }
     }
-
-
-
-
-
 }
