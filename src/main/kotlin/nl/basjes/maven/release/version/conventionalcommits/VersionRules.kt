@@ -19,45 +19,52 @@ package nl.basjes.maven.release.version.conventionalcommits
 import nl.basjes.maven.release.version.conventionalcommits.VersionStep.MAJOR
 import nl.basjes.maven.release.version.conventionalcommits.VersionStep.MINOR
 import nl.basjes.maven.release.version.conventionalcommits.VersionStep.PATCH
-import java.util.regex.Pattern
+import kotlin.text.RegexOption.DOT_MATCHES_ALL
+import kotlin.text.RegexOption.MULTILINE
+import kotlin.text.RegexOption.UNIX_LINES
 
 /**
  * The set of rules that determine from the commit history what the next version should be.
  */
-class VersionRules(config: ConventionalCommitsVersionConfig?) {
-    val tagPattern: Pattern
-    val majorUpdatePatterns: MutableList<Pattern> = mutableListOf()
-    val minorUpdatePatterns: MutableList<Pattern> = mutableListOf()
+class VersionRules(config: ConventionalCommitsVersionConfig = ConventionalCommitsVersionConfig()) {
+    val tagPattern: Regex
+    val majorUpdatePatterns: MutableList<Regex> = mutableListOf()
+    val minorUpdatePatterns: MutableList<Regex> = mutableListOf()
 
     init {
-        val patternFlags = Pattern.MULTILINE or Pattern.DOTALL or Pattern.UNIX_LINES
+        val regexFlags = setOf(MULTILINE, DOT_MATCHES_ALL, UNIX_LINES)
 
-        // The default assumes then entire tag is what we need
-        var tagRegex = "^(\\d+\\.\\d+\\.\\d+)$"
+        val semverConfigVersionTag = config.versionTag
+        val tagRegex = if (semverConfigVersionTag.isNullOrBlank()) {
+            // The default assumes then entire tag is what we need
+            // This is the SemVer 2.0.0 regex with only a single capture group for the entire thing.
+            """^((?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*))?)?(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$"""
+        } else {
+            semverConfigVersionTag
+        }
+        tagPattern = Regex(tagRegex)
 
-        // The default rules following https://www.conventionalcommits.org/en/v1.0.0/
-        majorUpdatePatterns.add(Pattern.compile("^[a-zA-Z]+(?:\\([a-zA-Z\\d_-]+\\))?!: .*$", patternFlags))
-        majorUpdatePatterns.add(Pattern.compile("^BREAKING CHANGE:.*$", patternFlags))
-        minorUpdatePatterns.add(Pattern.compile("^feat(?:\\([a-zA-Z\\d_-]+\\))?: .*$", patternFlags))
-
-        if (config != null) {
-            val semverConfigVersionTag = config.versionTag
-            if (!semverConfigVersionTag.isNullOrBlank()) {
-                tagRegex = semverConfigVersionTag
+        if (config.majorRules.isEmpty() && config.minorRules.isEmpty()) {
+            // The default rules following https://www.conventionalcommits.org/en/v1.0.0/
+            majorUpdatePatterns.add(Regex("^[a-zA-Z]+(?:\\([a-zA-Z\\d_-]+\\))?!: .*$", regexFlags))
+            majorUpdatePatterns.add(Regex("^BREAKING CHANGE:.*$", regexFlags))
+            minorUpdatePatterns.add(Regex("^feat(?:\\([a-zA-Z\\d_-]+\\))?: .*$", regexFlags))
+        } else {
+            for (majorRule in config.majorRules) {
+                majorUpdatePatterns.add(Regex(majorRule, regexFlags))
             }
-
-            if (config.majorRules.isNotEmpty() || config.minorRules.isNotEmpty()) {
-                majorUpdatePatterns.clear()
-                for (majorRule in config.majorRules) {
-                    majorUpdatePatterns.add(Pattern.compile(majorRule, patternFlags))
-                }
-                minorUpdatePatterns.clear()
-                for (minorRule in config.minorRules) {
-                    minorUpdatePatterns.add(Pattern.compile(minorRule, patternFlags))
-                }
+            for (minorRule in config.minorRules) {
+                minorUpdatePatterns.add(Regex(minorRule, regexFlags))
             }
         }
-        tagPattern = Pattern.compile(tagRegex, Pattern.MULTILINE)
+    }
+
+    /**
+     * Extract th version string or null if it did not match the configured extraction expression.
+     */
+    fun extractVersionString(tag: String): String? {
+        val matchResult = tagPattern.find(tag)
+        return matchResult?.groupValues?.get(1)
     }
 
     fun getMaxElementSinceLastVersionTag(commitHistory: CommitHistory): VersionStep {
@@ -82,10 +89,9 @@ class VersionRules(config: ConventionalCommitsVersionConfig?) {
         return matchesAny(minorUpdatePatterns, input)
     }
 
-    private fun matchesAny(patterns: MutableList<Pattern>, input: String): Boolean {
+    private fun matchesAny(patterns: MutableList<Regex>, input: String): Boolean {
         for (pattern in patterns) {
-            val matcher = pattern.matcher(input)
-            if (matcher.find()) {
+            if (pattern.find(input) != null) {
                 return true
             }
         }
