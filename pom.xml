@@ -15,14 +15,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>conventional-commits-version-policy</artifactId>
   <packaging>jar</packaging>
   <groupId>nl.basjes.maven.release</groupId>
-  <version>1.0.10-SNAPSHOT</version>
+  <version>2.0.0</version>
 
   <name>Conventional Commits Version Policy for the maven-release-plugin</name>
   <description>A version policy for the maven-release plugin to calculate the next version using the conventional commits.</description>
@@ -42,7 +41,7 @@
     <maven.minimal.version>3.5.2</maven.minimal.version>
 
     <!-- Needed to make the build reproducible https://reproducible-builds.org/ -->
-    <project.build.outputTimestamp>2025-12-14T09:10:00Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-10-11T07:18:09Z</project.build.outputTimestamp>
 
     <!-- ============================================== -->
 
@@ -801,7 +800,7 @@
     <url>https://github.com/nielsbasjes/conventional-commits-maven-release</url>
     <connection>scm:git:https://github.com/nielsbasjes/conventional-commits-maven-release.git</connection>
     <developerConnection>scm:git:file:///${project.basedir}</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v2.0.0</tag>
   </scm>
 
 </project>
