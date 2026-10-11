@@ -21,7 +21,7 @@
   <artifactId>conventional-commits-version-policy</artifactId>
   <packaging>jar</packaging>
   <groupId>nl.basjes.maven.release</groupId>
-  <version>2.0.0</version>
+  <version>2.0.1-SNAPSHOT</version>
 
   <name>Conventional Commits Version Policy for the maven-release-plugin</name>
   <description>A version policy for the maven-release plugin to calculate the next version using the conventional commits.</description>
@@ -41,7 +41,7 @@
     <maven.minimal.version>3.5.2</maven.minimal.version>
 
     <!-- Needed to make the build reproducible https://reproducible-builds.org/ -->
-    <project.build.outputTimestamp>2026-10-11T07:18:09Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-10-11T07:18:56Z</project.build.outputTimestamp>
 
     <!-- ============================================== -->
 
@@ -800,7 +800,7 @@
     <url>https://github.com/nielsbasjes/conventional-commits-maven-release</url>
     <connection>scm:git:https://github.com/nielsbasjes/conventional-commits-maven-release.git</connection>
     <developerConnection>scm:git:file:///${project.basedir}</developerConnection>
-    <tag>v2.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
 </project>
