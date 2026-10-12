@@ -35,7 +35,7 @@
     <java.version>17</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.release>${java.version}</maven.compiler.release>
-    <kotlin.version>2.4.20</kotlin.version>
+    <kotlin.version>2.4.21</kotlin.version>
 
     <!-- In order for everything to work correctly we need at least this version of maven. -->
     <maven.minimal.version>3.5.2</maven.minimal.version>
