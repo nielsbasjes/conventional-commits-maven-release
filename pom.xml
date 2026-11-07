@@ -75,7 +75,7 @@
       <dependency>
         <groupId>org.jetbrains.kotlinx</groupId>
         <artifactId>kotlinx-serialization-core-jvm</artifactId>
-        <version>1.11.0</version>
+        <version>1.12.0</version>
       </dependency>
 
       <dependency>
@@ -262,7 +262,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.6.3</version>
+            <version>3.7.0</version>
             <executions>
               <execution>
                 <id>Block release on too new Maven version</id>
@@ -499,7 +499,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.6.3</version>
+        <version>3.7.0</version>
         <executions>
           <execution>
             <id>Check build environment requirements</id>
@@ -562,7 +562,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.1</version>
         <configuration>
           <argLine>@{jacoco.surefireArgLine} -Xmx2048m</argLine>
           <failIfNoTests>true</failIfNoTests>
